@@ -1,0 +1,25 @@
+import 'dotenv/config';
+import { z } from 'zod';
+
+const envSchema = z.object({
+    port: z.coerce.number().default(3000),
+    nodeEnv: z.enum(['development', 'production']).default('development'),
+    logLevel: z
+        .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+        .default('info'),
+    allowedOrigins: z
+        .string()
+        .default('http://localhost:3000')
+        .transform((val) => val.split(',').map((origin) => origin.trim())),
+    apiVersion: z.string().default('1.0.0'),
+    host: z.string().default('0.0.0.0'),
+});
+
+export const env = envSchema.parse({
+    port: process.env.PORT,
+    nodeEnv: process.env.NODE_ENV,
+    logLevel: process.env.LOG_LEVEL,
+    allowedOrigins: process.env.ALLOWED_ORIGINS,
+    apiVersion: process.env.API_VERSION,
+    host: process.env.HOST,
+});
