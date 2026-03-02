@@ -1,3 +1,4 @@
+export * from './auth.schema';
 export * from './enums/week-day-enum';
 export * from './relations.schema';
 export * from './user.schema';

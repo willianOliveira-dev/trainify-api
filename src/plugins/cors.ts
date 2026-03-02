@@ -1,6 +1,6 @@
 import cors, { type FastifyCorsOptions } from '@fastify/cors';
 import fp from 'fastify-plugin';
-import { env } from '../config/env';
+import { env } from '@/config/env';
 
 export default fp<FastifyCorsOptions>(
   async (app) => {

@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { uuidv7 } from 'uuidv7';
-import { env } from '../config/env';
-import * as schema from './schemas';
+import { env } from '@/config/env';
+import * as schema from '@/db/schemas';
 
 const db = drizzle(env.databaseUrl, { schema });
 
@@ -1467,7 +1467,7 @@ const buildSessions = (): UserWorkoutSessionInsert[] => {
 async function seed() {
     console.log('🌱 Iniciando seed...');
     console.log('👥 Inserindo usuários...');
-    await db.insert(schema.users).values(
+    await db.insert(schema.user).values(
         USERS.map((u) => ({
             ...u,
             createdAt: daysAgo(Math.floor(Math.random() * 90) + 30),

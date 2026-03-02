@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { check, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { uuidv7 } from 'uuidv7';
-import { users } from './user.schema';
+import { user } from './user.schema';
 import { workoutDays } from './workout-day.schema';
 
 export const userWorkoutSessions = pgTable(
@@ -12,7 +12,7 @@ export const userWorkoutSessions = pgTable(
       .$defaultFn(() => uuidv7()),
     userId: text('user_id')
       .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+      .references(() => user.id, { onDelete: 'cascade' }),
     workoutDayId: text('workout_day_id')
       .notNull()
       .references(() => workoutDays.id, { onDelete: 'cascade' }),

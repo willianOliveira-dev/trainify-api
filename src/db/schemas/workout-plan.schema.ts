@@ -1,6 +1,6 @@
 import { boolean, index, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 import { uuidv7 } from 'uuidv7';
-import { users } from './user.schema';
+import { user } from './user.schema';
 
 export const workoutPlans = pgTable(
   'workout_plans',
@@ -11,7 +11,7 @@ export const workoutPlans = pgTable(
     name: text('name').notNull(),
     userId: text('user_id')
       .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+      .references(() => user.id, { onDelete: 'cascade' }),
     isActive: boolean('is_active').notNull().default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
