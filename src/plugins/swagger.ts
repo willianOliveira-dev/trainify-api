@@ -1,12 +1,12 @@
 import swagger from '@fastify/swagger';
-import swaggerUi from '@fastify/swagger-ui';
+import scalarApiReference from '@scalar/fastify-api-reference';
 import fp from 'fastify-plugin';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 import { env } from '@/config/env';
 
 export default fp(
     async (app) => {
-        app.register(swagger, {
+        await app.register(swagger, {
             openapi: {
                 openapi: '3.1.0',
                 info: {
@@ -48,23 +48,25 @@ export default fp(
             transform: jsonSchemaTransform,
         });
 
-        app.register(swaggerUi, {
+        await app.register(scalarApiReference, {
             routePrefix: '/docs',
-            uiConfig: {
-                docExpansion: 'list',
-                deepLinking: true,
-                persistAuthorization: true,
-            },
-            uiHooks: {
-                onRequest: (request, reply, next) => {
-                    if (
-                        env.nodeEnv === 'production' &&
-                        !request.headers['x-internal']
-                    ) {
-                        return reply.status(403).send({ message: 'Forbidden' });
-                    }
-                    next();
-                },
+            configuration: {
+                sources: [
+                    {
+                        title: 'Trainify API',
+                        slug: 'trainify-api',
+                        url: '/swagger.json',
+                    },
+                    {
+                        title: 'Auth API',
+                        slug: 'auth-api',
+                        url: '/api/auth/open-api/generate-schema',
+                    },
+                ],
+                content: () => app.swagger(),
+                showSidebar: true,
+                hideDownloadButton: false,
+                theme: 'saturn',
             },
         });
     },

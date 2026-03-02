@@ -6,6 +6,8 @@ import {
 } from 'fastify-type-provider-zod';
 import { env } from '@/config/env';
 import { registerPlugins } from '@/plugins';
+import { swaggerRoutes } from './modules/swagger/swagger.routes';
+import { authOpenApiRoutes } from './modules/auth/auth-open-api.routes';
 
 export async function boostrap() {
     const app = Fastify({
@@ -32,11 +34,11 @@ export async function boostrap() {
 
     await registerPlugins(app);
 
-    app.get('/health', async () => ({
-        status: 'ok',
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-    }));
+    app.register(swaggerRoutes, {
+        prefix: '/docs',
+    });
+
+    app.register(authOpenApiRoutes);
 
     return app;
 }
