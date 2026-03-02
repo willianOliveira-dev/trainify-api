@@ -4,7 +4,6 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true, // Garante que toda função retorne algo
