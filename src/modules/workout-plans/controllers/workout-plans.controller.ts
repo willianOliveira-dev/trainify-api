@@ -2,7 +2,9 @@ import { createWorkoutPlanUseCase } from '@/modules/workout-plans/use-cases/crea
 import { getAllWorkoutPlanUseCase } from '../use-cases/get-all-workout-plans.use-case';
 import { getByIdWorkoutPlanUseCase } from '../use-cases/get-by-id-workout-plan.use-case';
 import { startWorkoutSessionUseCase } from '../use-cases/start-workout-session.use-case';
+import { updateWorkoutSessionUseCase } from '../use-cases/update-workout-session.use-case';
 import type { StartWorkoutSessionHandler } from './start-workout-session.controller.types';
+import type { UpdateWorkoutSessionHandler } from './update-workout-session.controller.types';
 import type {
   CreateWorkoutPlanHandler,
   FindAllWorkoutPlansHandler,
@@ -10,6 +12,22 @@ import type {
 } from './workout-plans.controller.types';
 
 class WorkoutPlansController {
+  updateSession: UpdateWorkoutSessionHandler = async (request, reply) => {
+    const { id, dayId, sessionId } = request.params;
+    const { completedAt } = request.body;
+    const userId = request.session.user.id;
+
+    const session = await updateWorkoutSessionUseCase.execute({
+      workoutPlanId: id,
+      workoutDayId: dayId,
+      sessionId,
+      userId,
+      completedAt,
+    });
+
+    return reply.status(200).send(session);
+  };
+
   startSession: StartWorkoutSessionHandler = async (request, reply) => {
     const { id, dayId } = request.params;
 

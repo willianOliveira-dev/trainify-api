@@ -12,6 +12,11 @@ import {
   WorkoutPlanResponseSchema,
   WorkoutPlansListResponseSchema,
 } from '../schemas/workout-plans.schema';
+import {
+  UpdateWorkoutSessionBodySchema,
+  UpdateWorkoutSessionParamsSchema,
+  UpdateWorkoutSessionResponseSchema,
+} from '../dto/update-workout-session.dto';
 
 const workoutPlans: FastifyPluginAsyncZod = async (app) => {
   app.addHook('onRequest', app.authenticate);
@@ -28,6 +33,20 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
       }),
     },
     handler: workoutPlansController.startSession,
+  });
+
+  app.patch('/workout-plans/:id/days/:dayId/sessions/:sessionId', {
+    schema: {
+      tags: ['Workout Plans'],
+      summary: 'Atualiza uma sessão de treino',
+      params: UpdateWorkoutSessionParamsSchema,
+      body: UpdateWorkoutSessionBodySchema,
+      response: privateMutationResponse({
+        200: UpdateWorkoutSessionResponseSchema.describe('Sessão atualizada com sucesso'),
+        404: ErrorResponseSchema.describe('Plano ou Sessão de treino não encontrado(a)'),
+      }),
+    },
+    handler: workoutPlansController.updateSession,
   });
 
   app.post('/workout-plans', {

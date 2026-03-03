@@ -44,6 +44,30 @@ class UserWorkoutSessionsRepository {
 
     return session ?? null;
   }
+
+  async findById(id: string) {
+    const session = await db.query.userWorkoutSessions.findFirst({
+      where: (table, { eq }) => eq(table.id, id),
+    });
+
+    return session ?? null;
+  }
+
+  async update(id: string, data: { completedAt: Date }) {
+    const [session] = await db
+      .update(userWorkoutSessions)
+      .set({
+        completedAt: data.completedAt,
+      })
+      .where(require('drizzle-orm').eq(userWorkoutSessions.id, id))
+      .returning({
+        id: userWorkoutSessions.id,
+        startedAt: userWorkoutSessions.startedAt,
+        completedAt: userWorkoutSessions.completedAt,
+      });
+
+    return session;
+  }
 }
 
 const userWorkoutSessionsRepository = new UserWorkoutSessionsRepository();
