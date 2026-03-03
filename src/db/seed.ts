@@ -1,6 +1,7 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { uuidv7 } from 'uuidv7';
 import { env } from '@/config/env';
+import { sql } from 'drizzle-orm';
 import * as schema from '@/db/schemas';
 
 const db = drizzle(env.databaseUrl, { schema });
@@ -1493,7 +1494,21 @@ const buildSessions = (): UserWorkoutSessionInsert[] => {
     return sessions;
 };
 
+
+
+
+
+
+
+
 async function seed() {
+    console.log('🗑️ Limpando banco...');
+    await db.execute(sql`
+      TRUNCATE TABLE "workout_exercises", "workout_days", "workout_plans", 
+                     "user_workout_sessions", "session", "account", 
+                     "verification", "user" 
+      RESTART IDENTITY CASCADE;
+    `);
     console.log('🌱 Iniciando seed...');
     console.log('👥 Inserindo usuários...');
     await db.insert(schema.user).values(
