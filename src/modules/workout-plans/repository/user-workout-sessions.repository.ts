@@ -68,6 +68,19 @@ class UserWorkoutSessionsRepository {
 
     return session;
   }
+
+  async findSessionsByDateRange(userId: string, startAt: Date, endAt: Date) {
+    const sessions = await db.query.userWorkoutSessions.findMany({
+      where: (table, { and, eq, gte, lte }) =>
+        and(
+          eq(table.userId, userId),
+          gte(table.startedAt, startAt),
+          lte(table.startedAt, endAt),
+        ),
+    });
+
+    return sessions;
+  }
 }
 
 const userWorkoutSessionsRepository = new UserWorkoutSessionsRepository();

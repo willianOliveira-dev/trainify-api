@@ -212,6 +212,21 @@ class WorkoutPlansRepository {
     });
     return result ?? null;
   }
+
+  async findActiveByUserId(userId: string): Promise<WorkoutPlanRepositoryDbOutput | null> {
+    const result = await db.query.workoutPlans.findFirst({
+      where: (table, { and, eq }) => and(eq(table.isActive, true), eq(table.userId, userId)),
+      with: {
+        workoutDays: {
+          with: {
+            exercises: true,
+          },
+        },
+      },
+    });
+
+    return result ?? null;
+  }
 }
 
 const workoutPlansRepository = new WorkoutPlansRepository();
