@@ -12,7 +12,7 @@ export const ConsistencyDaySchema = z.object({
 
 export const GetStatsResponseSchema = z.object({
   workoutStreak: z.number(),
-  consistencyByDay: z.record(z.string(), ConsistencyDaySchema),
+  consistencyByDay: z.record(z.iso.date(), ConsistencyDaySchema),
   completedWorkoutsCount: z.number(),
   conclusionRate: z.number(),
   totalTimeInSeconds: z.number(),

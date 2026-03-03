@@ -25,5 +25,5 @@ export const GetHomeResponseSchema = z.object({
     exercisesCount: z.number(),
   }),
   workoutStreak: z.number(),
-  consistencyByDay: z.record(z.string(), ConsistencyDaySchema),
+  consistencyByDay: z.record(z.iso.date(), ConsistencyDaySchema),
 });
