@@ -2,9 +2,9 @@ import { relations } from 'drizzle-orm';
 import { account, session } from './auth.schema';
 import { user } from './user.schema';
 import { userWorkoutSessions } from './user-workout-sessions.schema';
-import { workoutDays } from './workout-day.schema';
+import { workoutDays } from './workout-days.schema';
 import { workoutExercises } from './workout-exercises.schema';
-import { workoutPlans } from './workout-plan.schema';
+import { workoutPlans } from './workout-plans.schema';
 
 export const userRelations = relations(user, ({ many }) => ({
     sessions: many(session),

@@ -5,9 +5,8 @@ import {
     type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import { env } from '@/config/env';
+import { registerAppRouter } from '@/modules/index.route';
 import { registerPlugins } from '@/plugins';
-import { swaggerRoutes } from './modules/swagger/swagger.routes';
-import { authOpenApiRoutes } from './modules/auth/auth-open-api.routes';
 
 export async function boostrap() {
     const app = Fastify({
@@ -33,12 +32,7 @@ export async function boostrap() {
     app.setSerializerCompiler(serializerCompiler);
 
     await registerPlugins(app);
-
-    app.register(swaggerRoutes, {
-        prefix: '/docs',
-    });
-
-    app.register(authOpenApiRoutes);
+    await registerAppRouter(app);
 
     return app;
 }
