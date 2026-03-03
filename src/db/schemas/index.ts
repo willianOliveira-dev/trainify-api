@@ -2,6 +2,7 @@ export * from './auth.schema';
 export * from './enums/week-day-enum';
 export * from './relations.schema';
 export * from './user.schema';
+export * from './user-train-data.schema';
 export * from './user-workout-sessions.schema';
 export * from './workout-days.schema';
 export * from './workout-exercises.schema';

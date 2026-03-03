@@ -1,16 +1,28 @@
 import { relations } from 'drizzle-orm';
 import { account, session } from './auth.schema';
 import { user } from './user.schema';
+import { userTrainData } from './user-train-data.schema';
 import { userWorkoutSessions } from './user-workout-sessions.schema';
 import { workoutDays } from './workout-days.schema';
 import { workoutExercises } from './workout-exercises.schema';
 import { workoutPlans } from './workout-plans.schema';
 
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ one, many }) => ({
   sessions: many(session),
   accounts: many(account),
   workoutPlans: many(workoutPlans),
   workoutSessions: many(userWorkoutSessions),
+  trainData: one(userTrainData, {
+    fields: [user.id],
+    references: [userTrainData.userId],
+  }),
+}));
+
+export const userTrainDataRelations = relations(userTrainData, ({ one }) => ({
+  user: one(user, {
+    fields: [userTrainData.userId],
+    references: [user.id],
+  }),
 }));
 
 export const workoutPlansRelations = relations(workoutPlans, ({ one, many }) => ({

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Fastify RouteHandler generics use PascalCase */
 import type { RouteHandler } from 'fastify';
 import type { GetStatsQueryDto, GetStatsResponseDto } from '../dto/stats.dto';
 

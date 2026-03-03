@@ -15,6 +15,13 @@
       "when": 1772570171562,
       "tag": "0001_cheerful_hellion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772579089813,
+      "tag": "0002_robust_gorgon",
+      "breakpoints": true
     }
   ]
 }
