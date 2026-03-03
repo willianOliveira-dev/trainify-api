@@ -25,6 +25,7 @@ export const workoutDays = pgTable(
             .references(() => workoutPlans.id, { onDelete: 'cascade' }),
         isRest: boolean('is_rest').notNull().default(false),
         weekDay: weekDayEnum('week_day').notNull(),
+        coverImageUrl: text('cover_image_url'),
         estimatedDurationInSeconds: integer('estimated_duration_in_seconds'),
         createdAt: timestamp('created_at', { withTimezone: true })
             .notNull()

@@ -21,6 +21,7 @@ export const WorkoutDaysSchema = z.object({
     isRest: z
         .boolean({ message: 'Dia de descanso deve ser booleano' })
         .default(false),
+    coverImageUrl: z.string().url({ message: 'URL inválida' }).optional().or(z.literal("").transform(val => val === "" ? null : val)),
     estimatedDurationInSeconds: z
         .number({ message: 'Duração deve ser um número' })
         .min(1, {
