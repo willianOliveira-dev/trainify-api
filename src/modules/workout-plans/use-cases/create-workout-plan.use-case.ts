@@ -1,22 +1,26 @@
 import type { CreateWorkoutPlanDto } from '../dto/workout-plans.dto';
-import { workoutPlansRepository } from '../repository/workout-plans.repository';
+import { workoutPlansRepository, WorkoutPlansRepository } from '../repository/workout-plans.repository';
 import type { WorkoutPlanRepositoryDbOutput } from '../repository/workout-plans.repository.types';
 import type { CreateWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
 
 class CreateWorkoutPlanUseCase {
+  constructor(
+    private readonly workoutPlansRepository: WorkoutPlansRepository,
+  ) {}
+
   async execute(dto: CreateWorkoutPlanDto): Promise<CreateWorkoutPlanUseCaseOutput> {
-    const existsPlanActive = await workoutPlansRepository.existsWorkoutPlanActive();
+    const existsPlanActive = await this.workoutPlansRepository.existsWorkoutPlanActive();
 
     let rawWorkoutPlan: WorkoutPlanRepositoryDbOutput;
 
     if (existsPlanActive) {
       const previousWorkoutPlanId = existsPlanActive.id;
-      rawWorkoutPlan = await workoutPlansRepository.deactivatePreviousAndCreateNew(
+      rawWorkoutPlan = await this.workoutPlansRepository.deactivatePreviousAndCreateNew(
         previousWorkoutPlanId,
         dto,
       );
     } else {
-      rawWorkoutPlan = await workoutPlansRepository.create(dto);
+      rawWorkoutPlan = await this.workoutPlansRepository.create(dto);
     }
 
     const workoutPlanSerializer: CreateWorkoutPlanUseCaseOutput = {
@@ -46,6 +50,6 @@ class CreateWorkoutPlanUseCase {
   }
 }
 
-const createWorkoutPlanUseCase = new CreateWorkoutPlanUseCase();
+const createWorkoutPlanUseCase = new CreateWorkoutPlanUseCase(workoutPlansRepository);
 
 export { CreateWorkoutPlanUseCase, createWorkoutPlanUseCase };

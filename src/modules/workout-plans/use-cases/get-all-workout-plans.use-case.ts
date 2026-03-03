@@ -1,9 +1,13 @@
-import { workoutPlansRepository } from '../repository/workout-plans.repository';
+import { WorkoutPlansRepository, workoutPlansRepository } from '../repository/workout-plans.repository';
 import type { GetAllWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
 
 class GetAllWorkoutPlanUseCase {
+  constructor(
+    private readonly workoutPlansRepository: WorkoutPlansRepository,
+  ) {}
+
   async execute(): Promise<GetAllWorkoutPlanUseCaseOutput> {
-    const workoutPlans = await workoutPlansRepository.findAll();
+    const workoutPlans = await this.workoutPlansRepository.findAll();
     return workoutPlans.map((plan) => ({
       id: plan.id,
       name: plan.name,
@@ -29,6 +33,6 @@ class GetAllWorkoutPlanUseCase {
   }
 }
 
-const getAllWorkoutPlanUseCase = new GetAllWorkoutPlanUseCase();
+const getAllWorkoutPlanUseCase = new GetAllWorkoutPlanUseCase(workoutPlansRepository);
 
 export { GetAllWorkoutPlanUseCase, getAllWorkoutPlanUseCase };

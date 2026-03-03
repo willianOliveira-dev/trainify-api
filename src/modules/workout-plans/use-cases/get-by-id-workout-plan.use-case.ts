@@ -1,13 +1,17 @@
 import { NotFoundError } from '@/shared/errors/app.error';
-import { workoutPlansRepository } from '../repository/workout-plans.repository';
+import { WorkoutPlansRepository, workoutPlansRepository } from '../repository/workout-plans.repository';
 import type {
   GetWorkoutPlanUseCaseInput,
   GetWorkoutPlanUseCaseOutput,
 } from './workout-plans.use-case.types';
 
 class GetByIdWorkoutPlanUseCase {
+  constructor(
+    private readonly workoutPlansRepository: WorkoutPlansRepository,
+  ) {}
+
   async execute({ id }: GetWorkoutPlanUseCaseInput): Promise<GetWorkoutPlanUseCaseOutput> {
-    const workoutPlan = await workoutPlansRepository.findById(id);
+    const workoutPlan = await this.workoutPlansRepository.findById(id);
 
     if (!workoutPlan) {
       throw new NotFoundError('Plano de treino');
@@ -39,6 +43,6 @@ class GetByIdWorkoutPlanUseCase {
   }
 }
 
-const getByIdWorkoutPlanUseCase = new GetByIdWorkoutPlanUseCase();
+const getByIdWorkoutPlanUseCase = new GetByIdWorkoutPlanUseCase(workoutPlansRepository);
 
 export { GetByIdWorkoutPlanUseCase, getByIdWorkoutPlanUseCase };
