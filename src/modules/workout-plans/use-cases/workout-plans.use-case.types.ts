@@ -1,9 +1,9 @@
 import type {
-    CreateWorkoutPlanDto,
-    UpdateWorkoutPlanDto,
-    WorkoutPlanParamsDto,
-    WorkoutPlanResponseDto,
-    WorkoutPlansListResponseDto,
+  CreateWorkoutPlanDto,
+  UpdateWorkoutPlanDto,
+  WorkoutPlanParamsDto,
+  WorkoutPlanResponseDto,
+  WorkoutPlansListResponseDto,
 } from '../dto/workout-plans.dto';
 
 export type CreateWorkoutPlanUseCaseInput = CreateWorkoutPlanDto;

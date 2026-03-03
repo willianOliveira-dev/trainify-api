@@ -8,13 +8,13 @@ import rateLimitPlugin from './rate-limit';
 import swaggerPlugin from './swagger';
 
 export async function registerPlugins(app: FastifyInstance) {
-    await app.register(helmetPlugin);
-    await app.register(corsPlugin);
-    await app.register(rateLimitPlugin);
+  await app.register(helmetPlugin);
+  await app.register(corsPlugin);
+  await app.register(rateLimitPlugin);
 
-    await app.register(errorHandlerPlugin);
-    await app.register(authPlugin);
-    await app.register(multipartPlugin);
+  await app.register(errorHandlerPlugin);
+  await app.register(authPlugin);
+  await app.register(multipartPlugin);
 
-    await app.register(swaggerPlugin);
+  await app.register(swaggerPlugin);
 }

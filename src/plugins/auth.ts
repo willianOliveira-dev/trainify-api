@@ -6,35 +6,29 @@ import { auth } from '@/lib/auth';
 import { UnauthorizedError } from '@/shared/errors/app.error';
 
 declare module 'fastify' {
-    interface FastifyRequest {
-        session: { user: User; session: Session };
-    }
-    interface FastifyInstance {
-        authenticate: (
-            request: FastifyRequest,
-            reply: FastifyReply,
-        ) => Promise<void>;
-    }
+  interface FastifyRequest {
+    session: { user: User; session: Session };
+  }
+  interface FastifyInstance {
+    authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+  }
 }
 
 export default fp(
-    async (app) => {
-        app.decorate(
-            'authenticate',
-            async (request: FastifyRequest, _: FastifyReply) => {
-                const session = await auth.api.getSession({
-                    headers: fromNodeHeaders(request.headers),
-                });
+  async (app) => {
+    app.decorate('authenticate', async (request: FastifyRequest, _: FastifyReply) => {
+      const session = await auth.api.getSession({
+        headers: fromNodeHeaders(request.headers),
+      });
 
-                if (!session) {
-                    throw new UnauthorizedError('Usuário não autenticado');
-                }
+      if (!session) {
+        throw new UnauthorizedError('Usuário não autenticado');
+      }
 
-                request.session = session;
-            },
-        );
-    },
-    {
-        name: 'auth',
-    },
+      request.session = session;
+    });
+  },
+  {
+    name: 'auth',
+  },
 );

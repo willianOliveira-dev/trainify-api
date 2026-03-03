@@ -110,12 +110,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -202,12 +198,8 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -217,9 +209,7 @@
         "session_token_unique": {
           "name": "session_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -491,12 +481,8 @@
           "name": "user_workout_sessions_user_id_user_id_fk",
           "tableFrom": "user_workout_sessions",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -504,12 +490,8 @@
           "name": "user_workout_sessions_workout_day_id_workout_days_id_fk",
           "tableFrom": "user_workout_sessions",
           "tableTo": "workout_days",
-          "columnsFrom": [
-            "workout_day_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workout_day_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -646,12 +628,8 @@
           "name": "workout_days_workout_plan_id_workout_plans_id_fk",
           "tableFrom": "workout_days",
           "tableTo": "workout_plans",
-          "columnsFrom": [
-            "workout_plan_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workout_plan_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -777,12 +755,8 @@
           "name": "workout_exercises_workout_day_id_workout_days_id_fk",
           "tableFrom": "workout_exercises",
           "tableTo": "workout_days",
-          "columnsFrom": [
-            "workout_day_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workout_day_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -933,12 +907,8 @@
           "name": "workout_plans_user_id_user_id_fk",
           "tableFrom": "workout_plans",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -954,15 +924,7 @@
     "public.week_day": {
       "name": "week_day",
       "schema": "public",
-      "values": [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday"
-      ]
+      "values": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
     }
   },
   "schemas": {},

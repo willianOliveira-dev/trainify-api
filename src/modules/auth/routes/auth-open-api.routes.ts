@@ -1,20 +1,16 @@
-import type {
-    FastifyPluginAsyncZod,
-    ZodTypeProvider,
-} from 'fastify-type-provider-zod';
+import type { FastifyPluginAsyncZod, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { auth } from '@/lib/auth';
 
 export const authOpenApiRoutes: FastifyPluginAsyncZod = async (app) => {
-    app.withTypeProvider<ZodTypeProvider>().route({
-        method: 'GET',
-        url: '/api/auth/open-api/generate-schema',
-        schema: {
-            hide: true,
-        },
-        handler: async () => {
-            const openApiSchema = await auth.api.generateOpenAPISchema();
-            return openApiSchema;
-        },
-    });
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: 'GET',
+    url: '/api/auth/open-api/generate-schema',
+    schema: {
+      hide: true,
+    },
+    handler: async () => {
+      const openApiSchema = await auth.api.generateOpenAPISchema();
+      return openApiSchema;
+    },
+  });
 };
-

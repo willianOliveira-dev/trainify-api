@@ -1,9 +1,9 @@
 import type { z } from 'zod';
 import type {
-    CreateWorkoutDaySchema,
-    UpdateWorkoutDaySchema,
-    WorkoutDaysParamsSchema,
-    WorkoutDaysResponseSchema,
+  CreateWorkoutDaySchema,
+  UpdateWorkoutDaySchema,
+  WorkoutDaysParamsSchema,
+  WorkoutDaysResponseSchema,
 } from '@/modules/workout-days/schemas/workout-days.schema';
 
 export type CreateWorkoutDayDto = z.infer<typeof CreateWorkoutDaySchema>;

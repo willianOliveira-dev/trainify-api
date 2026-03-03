@@ -4,50 +4,46 @@ import type { WorkoutPlanRepositoryDbOutput } from '../repository/workout-plans.
 import type { CreateWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
 
 class CreateWorkoutPlanUseCase {
-    async execute(
-        dto: CreateWorkoutPlanDto,
-    ): Promise<CreateWorkoutPlanUseCaseOutput> {
-        const existsPlanActive =
-            await workoutPlansRepository.existsWorkoutPlanActive();
+  async execute(dto: CreateWorkoutPlanDto): Promise<CreateWorkoutPlanUseCaseOutput> {
+    const existsPlanActive = await workoutPlansRepository.existsWorkoutPlanActive();
 
-        let rawWorkoutPlan: WorkoutPlanRepositoryDbOutput;
+    let rawWorkoutPlan: WorkoutPlanRepositoryDbOutput;
 
-        if (existsPlanActive) {
-            const previousWorkoutPlanId = existsPlanActive.id;
-            rawWorkoutPlan =
-                await workoutPlansRepository.deactivatePreviousAndCreateNew(
-                    previousWorkoutPlanId,
-                    dto,
-                );
-        } else {
-            rawWorkoutPlan = await workoutPlansRepository.create(dto);
-        }
-
-        const workoutPlanSerializer: CreateWorkoutPlanUseCaseOutput = {
-            id: rawWorkoutPlan.id,
-            name: rawWorkoutPlan.name,
-            isActive: rawWorkoutPlan.isActive,
-            createdAt: rawWorkoutPlan.createdAt,
-            updatedAt: rawWorkoutPlan.updatedAt,
-            workoutDays: rawWorkoutPlan.workoutDays.map((day) => ({
-                id: day.id,
-                name: day.name,
-                weekDay: day.weekDay,
-                isRest: day.isRest,
-                estimatedDurationInSeconds: day.estimatedDurationInSeconds ?? 1,
-                exercises: day.exercises.map((exercise) => ({
-                    id: exercise.id,
-                    name: exercise.name,
-                    order: exercise.order,
-                    sets: exercise.sets,
-                    reps: exercise.reps,
-                    restTimeInSeconds: exercise.restTimeInSeconds,
-                })),
-            })),
-        };
-
-        return workoutPlanSerializer;
+    if (existsPlanActive) {
+      const previousWorkoutPlanId = existsPlanActive.id;
+      rawWorkoutPlan = await workoutPlansRepository.deactivatePreviousAndCreateNew(
+        previousWorkoutPlanId,
+        dto,
+      );
+    } else {
+      rawWorkoutPlan = await workoutPlansRepository.create(dto);
     }
+
+    const workoutPlanSerializer: CreateWorkoutPlanUseCaseOutput = {
+      id: rawWorkoutPlan.id,
+      name: rawWorkoutPlan.name,
+      isActive: rawWorkoutPlan.isActive,
+      createdAt: rawWorkoutPlan.createdAt,
+      updatedAt: rawWorkoutPlan.updatedAt,
+      workoutDays: rawWorkoutPlan.workoutDays.map((day) => ({
+        id: day.id,
+        name: day.name,
+        weekDay: day.weekDay,
+        isRest: day.isRest,
+        estimatedDurationInSeconds: day.estimatedDurationInSeconds ?? 1,
+        exercises: day.exercises.map((exercise) => ({
+          id: exercise.id,
+          name: exercise.name,
+          order: exercise.order,
+          sets: exercise.sets,
+          reps: exercise.reps,
+          restTimeInSeconds: exercise.restTimeInSeconds,
+        })),
+      })),
+    };
+
+    return workoutPlanSerializer;
+  }
 }
 
 const createWorkoutPlanUseCase = new CreateWorkoutPlanUseCase();
