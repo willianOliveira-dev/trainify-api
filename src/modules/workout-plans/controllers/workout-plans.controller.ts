@@ -1,5 +1,6 @@
 import { createWorkoutPlanUseCase } from '@/modules/workout-plans/use-cases/create-workout-plan.use-case';
 import { getAllWorkoutPlanUseCase } from '../use-cases/get-all-workout-plans.use-case';
+import { getWorkoutDayDetailsUseCase } from '../use-cases/get-workout-day-details.use-case';
 import { getWorkoutPlanDetailsUseCase } from '../use-cases/get-workout-plan-details.use-case';
 import { startWorkoutSessionUseCase } from '../use-cases/start-workout-session.use-case';
 import { updateWorkoutSessionUseCase } from '../use-cases/update-workout-session.use-case';
@@ -9,6 +10,7 @@ import type {
   CreateWorkoutPlanHandler,
   FindAllWorkoutPlansHandler,
   FindByIdHandler,
+  FindDayDetailsHandler,
 } from './workout-plans.controller.types';
 
 class WorkoutPlansController {
@@ -52,6 +54,13 @@ class WorkoutPlansController {
     const { id } = request.params;
     const userId = request.session.user.id;
     const output = await getWorkoutPlanDetailsUseCase.execute({ id, userId });
+    return reply.status(200).send(output);
+  };
+
+  findDayDetails: FindDayDetailsHandler = async (request, reply) => {
+    const { id, dayId } = request.params;
+    const userId = request.session.user.id;
+    const output = await getWorkoutDayDetailsUseCase.execute({ planId: id, dayId, userId });
     return reply.status(200).send(output);
   };
 

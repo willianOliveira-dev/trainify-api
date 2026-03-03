@@ -49,6 +49,12 @@ export const WorkoutPlanParamsSchema = z.object({
     .nonempty({ message: 'Id é obrigatório' }),
 });
 
+export const WorkoutPlanDayParamsSchema = WorkoutPlanParamsSchema.extend({
+  dayId: z
+    .uuid({ version: 'v7', message: 'DayId deve ser um uuid v7' })
+    .nonempty({ message: 'DayId é obrigatório' }),
+});
+
 export const WorkoutPlanResponseSchema = WorkoutPlansSchema.omit({
   userId: true,
 }).extend({
@@ -69,6 +75,34 @@ export const GetWorkoutPlanDetailsResponseSchema = z.object({
       coverImageUrl: z.string().optional(),
       estimatedDurationInSeconds: z.number(),
       exercisesCount: z.number(),
+    }),
+  ),
+});
+
+export const GetWorkoutDayResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  isRest: z.boolean(),
+  coverImageUrl: z.string().optional(),
+  estimatedDurationInSeconds: z.number(),
+  weekDay: z.enum(weekDayEnum.enumValues),
+  exercises: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      sets: z.number(),
+      reps: z.number(),
+      restTimeInSeconds: z.number(),
+      order: z.number(),
+      workoutDayId: z.string(),
+    }),
+  ),
+  sessions: z.array(
+    z.object({
+      id: z.string(),
+      workoutDayId: z.string(),
+      startedAt: z.string().optional(),
+      completedAt: z.string().optional(),
     }),
   ),
 });

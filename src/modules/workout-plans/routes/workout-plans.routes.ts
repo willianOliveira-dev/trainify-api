@@ -13,7 +13,9 @@ import {
 } from '../dto/update-workout-session.dto';
 import {
   CreateWorkoutPlanSchema,
+  GetWorkoutDayResponseSchema,
   GetWorkoutPlanDetailsResponseSchema,
+  WorkoutPlanDayParamsSchema,
   WorkoutPlanParamsSchema,
   WorkoutPlanResponseSchema,
   WorkoutPlansListResponseSchema,
@@ -85,6 +87,19 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
       }),
     },
     handler: workoutPlansController.findById,
+  });
+
+  app.get('/workout-plans/:id/days/:dayId', {
+    schema: {
+      tags: ['Workout Plans'],
+      summary: 'Retorna os detalhes de um dia do plano',
+      params: WorkoutPlanDayParamsSchema,
+      response: privateResponse({
+        200: GetWorkoutDayResponseSchema.describe('Dia do plano retornado com sucesso'),
+        404: ErrorResponseSchema.describe('Plano ou Dia de treino não encontrado'),
+      }),
+    },
+    handler: workoutPlansController.findDayDetails,
   });
 };
 

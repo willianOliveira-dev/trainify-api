@@ -1,8 +1,10 @@
 import { z } from 'zod';
 import {
   CreateWorkoutPlanSchema,
+  type GetWorkoutDayResponseSchema,
   type GetWorkoutPlanDetailsResponseSchema,
   type UpdateWorkoutPlanSchema,
+  type WorkoutPlanDayParamsSchema,
   type WorkoutPlanParamsSchema,
   type WorkoutPlanResponseSchema,
   type WorkoutPlansListResponseSchema,
@@ -15,6 +17,8 @@ const CreateWorkoutPlanDtoSchema = CreateWorkoutPlanSchema.extend({
 export type CreateWorkoutPlanDto = z.infer<typeof CreateWorkoutPlanDtoSchema>;
 export type UpdateWorkoutPlanDto = z.infer<typeof UpdateWorkoutPlanSchema>;
 export type WorkoutPlanParamsDto = z.infer<typeof WorkoutPlanParamsSchema>;
+export type WorkoutPlanDayParamsDto = z.infer<typeof WorkoutPlanDayParamsSchema>;
 export type WorkoutPlanResponseDto = z.infer<typeof WorkoutPlanResponseSchema>;
 export type WorkoutPlansListResponseDto = z.infer<typeof WorkoutPlansListResponseSchema>;
 export type GetWorkoutPlanDetailsResponseDto = z.infer<typeof GetWorkoutPlanDetailsResponseSchema>;
+export type GetWorkoutDayResponseDto = z.infer<typeof GetWorkoutDayResponseSchema>;

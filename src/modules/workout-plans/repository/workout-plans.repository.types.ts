@@ -2,6 +2,7 @@ import type { InferSelectModel } from 'drizzle-orm';
 import type { workoutDays, workoutExercises, workoutPlans } from '@/db/schemas';
 import type {
   CreateWorkoutPlanDto,
+  GetWorkoutDayResponseDto,
   GetWorkoutPlanDetailsResponseDto,
   UpdateWorkoutPlanDto,
 } from '@/modules/workout-plans/dto/workout-plans.dto';
@@ -19,4 +20,7 @@ export type WorkoutPlanRepositoryDbOutput = WorkoutPlanWithRelations;
 export type WorkoutPlansListRepositoryDbOutput = WorkoutPlanWithRelations[];
 export type WorkoutPlanDetailsRepositoryDbOutput = GetWorkoutPlanDetailsResponseDto & {
   userId: string;
+};
+export type WorkoutDayDetailsRepositoryDbOutput = GetWorkoutDayResponseDto & {
+  workoutPlanUserId: string;
 };

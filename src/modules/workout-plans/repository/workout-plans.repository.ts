@@ -4,6 +4,7 @@ import { workoutDays, workoutExercises, workoutPlans } from '@/db/schemas';
 import type {
   CreateWorkoutPlanRepositoryInput,
   UpdateWorkoutPlanRepositoryInput,
+  WorkoutDayDetailsRepositoryDbOutput,
   WorkoutPlanDetailsRepositoryDbOutput,
   WorkoutPlanRepositoryDbOutput,
   WorkoutPlansListRepositoryDbOutput,
@@ -117,6 +118,58 @@ class WorkoutPlansRepository {
         coverImageUrl: day.coverImageUrl ?? undefined,
         estimatedDurationInSeconds: day.estimatedDurationInSeconds ?? 0,
         exercisesCount: day.exercises.length,
+      })),
+    };
+  }
+
+  async findDayDetailsById(
+    planId: string,
+    dayId: string,
+  ): Promise<WorkoutDayDetailsRepositoryDbOutput | null> {
+    const result = await db.query.workoutDays.findFirst({
+      where: (table, { and, eq }) => and(eq(table.id, dayId), eq(table.workoutPlanId, planId)),
+      with: {
+        workoutPlan: {
+          columns: {
+            userId: true,
+          },
+        },
+        exercises: {
+          columns: {
+            createdAt: false,
+            updatedAt: false,
+          },
+        },
+        sessions: {
+          where: (sessionTable, { eq }) => eq(sessionTable.workoutDayId, dayId),
+          columns: {
+            id: true,
+            workoutDayId: true,
+            startedAt: true,
+            completedAt: true,
+          },
+        },
+      },
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return {
+      id: result.id,
+      name: result.name,
+      isRest: result.isRest,
+      coverImageUrl: result.coverImageUrl ?? undefined,
+      estimatedDurationInSeconds: result.estimatedDurationInSeconds ?? 0,
+      weekDay: result.weekDay as any,
+      workoutPlanUserId: result.workoutPlan.userId,
+      exercises: result.exercises,
+      sessions: result.sessions.map((session) => ({
+        id: session.id,
+        workoutDayId: session.workoutDayId,
+        startedAt: session.startedAt?.toISOString(),
+        completedAt: session.completedAt?.toISOString(),
       })),
     };
   }

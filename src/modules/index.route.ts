@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { authRoutes } from './auth/routes/auth.routes';
 import { authOpenApiRoutes } from './auth/routes/auth-open-api.routes';
 import { home } from './home/routes/home.routes';
+import { statsRoutes } from './stats/routes/stats.routes';
 import { swaggerRoutes } from './swagger/routes/swagger.routes';
 import { workoutPlans } from './workout-plans/routes/workout-plans.routes';
 
@@ -11,4 +12,5 @@ export async function registerAppRouter(app: FastifyInstance): Promise<void> {
   await app.register(authRoutes);
   await app.register(workoutPlans, { prefix: '/api/v1' });
   await app.register(home, { prefix: '/api/v1' });
+  await app.register(statsRoutes, { prefix: '/api/v1' });
 }
