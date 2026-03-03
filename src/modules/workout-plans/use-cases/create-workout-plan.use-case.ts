@@ -1,12 +1,13 @@
 import type { CreateWorkoutPlanDto } from '../dto/workout-plans.dto';
-import { workoutPlansRepository, WorkoutPlansRepository } from '../repository/workout-plans.repository';
+import {
+  type WorkoutPlansRepository,
+  workoutPlansRepository,
+} from '../repository/workout-plans.repository';
 import type { WorkoutPlanRepositoryDbOutput } from '../repository/workout-plans.repository.types';
 import type { CreateWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
 
 class CreateWorkoutPlanUseCase {
-  constructor(
-    private readonly workoutPlansRepository: WorkoutPlansRepository,
-  ) {}
+  constructor(private readonly workoutPlansRepository: WorkoutPlansRepository) {}
 
   async execute(dto: CreateWorkoutPlanDto): Promise<CreateWorkoutPlanUseCaseOutput> {
     const existsPlanActive = await this.workoutPlansRepository.existsWorkoutPlanActive();

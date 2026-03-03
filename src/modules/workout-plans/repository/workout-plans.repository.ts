@@ -4,6 +4,7 @@ import { workoutDays, workoutExercises, workoutPlans } from '@/db/schemas';
 import type {
   CreateWorkoutPlanRepositoryInput,
   UpdateWorkoutPlanRepositoryInput,
+  WorkoutPlanDetailsRepositoryDbOutput,
   WorkoutPlanRepositoryDbOutput,
   WorkoutPlansListRepositoryDbOutput,
 } from '@/modules/workout-plans/repository/workout-plans.repository.types';
@@ -82,6 +83,42 @@ class WorkoutPlansRepository {
       },
     });
     return result ?? null;
+  }
+
+  async findDetailsById(id: string): Promise<WorkoutPlanDetailsRepositoryDbOutput | null> {
+    const result = await db.query.workoutPlans.findFirst({
+      where: (table, { eq }) => eq(table.id, id),
+      with: {
+        workoutDays: {
+          with: {
+            exercises: {
+              columns: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return {
+      id: result.id,
+      userId: result.userId,
+      name: result.name,
+      workoutDays: result.workoutDays.map((day) => ({
+        id: day.id,
+        weekDay: day.weekDay as any,
+        name: day.name,
+        isRest: day.isRest,
+        coverImageUrl: day.coverImageUrl ?? undefined,
+        estimatedDurationInSeconds: day.estimatedDurationInSeconds ?? 0,
+        exercisesCount: day.exercises.length,
+      })),
+    };
   }
 
   async findAll(): Promise<WorkoutPlansListRepositoryDbOutput> {

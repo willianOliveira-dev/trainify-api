@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   CreateWorkoutPlanSchema,
+  type GetWorkoutPlanDetailsResponseSchema,
   type UpdateWorkoutPlanSchema,
   type WorkoutPlanParamsSchema,
   type WorkoutPlanResponseSchema,
@@ -16,3 +17,4 @@ export type UpdateWorkoutPlanDto = z.infer<typeof UpdateWorkoutPlanSchema>;
 export type WorkoutPlanParamsDto = z.infer<typeof WorkoutPlanParamsSchema>;
 export type WorkoutPlanResponseDto = z.infer<typeof WorkoutPlanResponseSchema>;
 export type WorkoutPlansListResponseDto = z.infer<typeof WorkoutPlansListResponseSchema>;
+export type GetWorkoutPlanDetailsResponseDto = z.infer<typeof GetWorkoutPlanDetailsResponseSchema>;

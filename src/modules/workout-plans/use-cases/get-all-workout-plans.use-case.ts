@@ -1,10 +1,11 @@
-import { WorkoutPlansRepository, workoutPlansRepository } from '../repository/workout-plans.repository';
+import {
+  type WorkoutPlansRepository,
+  workoutPlansRepository,
+} from '../repository/workout-plans.repository';
 import type { GetAllWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
 
 class GetAllWorkoutPlanUseCase {
-  constructor(
-    private readonly workoutPlansRepository: WorkoutPlansRepository,
-  ) {}
+  constructor(private readonly workoutPlansRepository: WorkoutPlansRepository) {}
 
   async execute(): Promise<GetAllWorkoutPlanUseCaseOutput> {
     const workoutPlans = await this.workoutPlansRepository.findAll();

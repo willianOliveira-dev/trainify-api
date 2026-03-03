@@ -1,8 +1,8 @@
 import type { z } from 'zod';
-import {
+import type {
+  ConsistencyDaySchema,
   GetHomeParamsSchema,
   GetHomeResponseSchema,
-  ConsistencyDaySchema,
 } from '../schemas/home.schema';
 
 export type GetHomeParamsDto = z.infer<typeof GetHomeParamsSchema>;

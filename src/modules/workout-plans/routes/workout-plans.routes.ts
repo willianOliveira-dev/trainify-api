@@ -7,16 +7,17 @@ import {
   WorkoutSessionResponseSchema,
 } from '../dto/start-session.dto';
 import {
-  CreateWorkoutPlanSchema,
-  WorkoutPlanParamsSchema,
-  WorkoutPlanResponseSchema,
-  WorkoutPlansListResponseSchema,
-} from '../schemas/workout-plans.schema';
-import {
   UpdateWorkoutSessionBodySchema,
   UpdateWorkoutSessionParamsSchema,
   UpdateWorkoutSessionResponseSchema,
 } from '../dto/update-workout-session.dto';
+import {
+  CreateWorkoutPlanSchema,
+  GetWorkoutPlanDetailsResponseSchema,
+  WorkoutPlanParamsSchema,
+  WorkoutPlanResponseSchema,
+  WorkoutPlansListResponseSchema,
+} from '../schemas/workout-plans.schema';
 
 const workoutPlans: FastifyPluginAsyncZod = async (app) => {
   app.addHook('onRequest', app.authenticate);
@@ -79,7 +80,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
       summary: 'Retorna um plano de treino',
       params: WorkoutPlanParamsSchema,
       response: privateResponse({
-        200: WorkoutPlansListResponseSchema.describe('Plano de treino encontrado'),
+        200: GetWorkoutPlanDetailsResponseSchema.describe('Plano de treino encontrado'),
         404: ErrorResponseSchema.describe('Plano de treino não encontrado'),
       }),
     },

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { weekDayEnum } from '@/db/schemas/enums/week-day-enum';
 
 export const GetHomeParamsSchema = z.object({
   date: z
@@ -18,7 +19,7 @@ export const GetHomeResponseSchema = z.object({
     id: z.string(),
     name: z.string(),
     isRest: z.boolean(),
-    weekDay: z.string(),
+    weekDay: z.enum(weekDayEnum.enumValues),
     estimatedDurationInSeconds: z.number(),
     coverImageUrl: z.string().optional(),
     exercisesCount: z.number(),

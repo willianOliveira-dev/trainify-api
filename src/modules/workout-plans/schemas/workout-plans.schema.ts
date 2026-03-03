@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { weekDayEnum } from '@/db/schemas/enums/week-day-enum';
 import {
   CreateWorkoutDaySchema,
   WorkoutDaysResponseSchema,
@@ -55,3 +56,19 @@ export const WorkoutPlanResponseSchema = WorkoutPlansSchema.omit({
 });
 
 export const WorkoutPlansListResponseSchema = z.array(WorkoutPlanResponseSchema);
+
+export const GetWorkoutPlanDetailsResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  workoutDays: z.array(
+    z.object({
+      id: z.string(),
+      weekDay: z.enum(weekDayEnum.enumValues),
+      name: z.string(),
+      isRest: z.boolean(),
+      coverImageUrl: z.string().optional(),
+      estimatedDurationInSeconds: z.number(),
+      exercisesCount: z.number(),
+    }),
+  ),
+});

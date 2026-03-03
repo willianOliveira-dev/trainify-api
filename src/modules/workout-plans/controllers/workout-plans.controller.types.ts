@@ -3,6 +3,7 @@
 import type { RouteHandler } from 'fastify';
 import type {
   CreateWorkoutPlanDto,
+  GetWorkoutPlanDetailsResponseDto,
   WorkoutPlanParamsDto,
   WorkoutPlanResponseDto,
   WorkoutPlansListResponseDto,
@@ -16,7 +17,7 @@ export type CreateWorkoutPlanHandler = RouteHandler<{
 }>;
 
 export type FindByIdWorkoutPlanParams = WorkoutPlanParamsDto;
-export type FindByIdWorkoutPlanResponse = WorkoutPlanResponseDto;
+export type FindByIdWorkoutPlanResponse = GetWorkoutPlanDetailsResponseDto;
 export type FindByIdHandler = RouteHandler<{
   Params: FindByIdWorkoutPlanParams;
   Reply: FindByIdWorkoutPlanResponse;
