@@ -9,7 +9,7 @@ const usersRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/me', {
     schema: {
-      tags: ['Users'],
+      tags: ['Me'],
       summary: 'Retorna os dados de treino do usuário autenticado (null se não cadastrado)',
       response: privateResponse({
         200: GetUserTrainDataResponseSchema.describe('Dados de treino do usuário'),
@@ -20,7 +20,7 @@ const usersRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.put('/me/train-data', {
     schema: {
-      tags: ['Users'],
+      tags: ['Me'],
       summary: 'Cria ou atualiza os dados de treino do usuário autenticado',
       body: UpsertUserTrainDataSchema,
       response: privateMutationResponse({

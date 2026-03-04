@@ -10,6 +10,11 @@ const ChatBodySchema = z.object({
     messages: z.array(ChatMessageSchema).min(1),
 });
 
+const ChatResponseSchema = z.object({
+    text: z.string(),
+});
+
+
 const ExerciseSchema = z.object({
     name: z.string().describe('Nome do exercício'),
     order: z.number().describe('Ordem do exercício na sessão'),
@@ -29,4 +34,4 @@ const WorkoutDaySchema = z.object({
     exercises: z.array(ExerciseSchema),
 });
 
-export { ChatBodySchema, ChatMessageSchema, ExerciseSchema, WorkoutDaySchema };
+export { ChatBodySchema, ChatResponseSchema ,ChatMessageSchema, ExerciseSchema, WorkoutDaySchema };

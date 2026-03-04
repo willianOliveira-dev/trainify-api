@@ -58,7 +58,6 @@ const buildAiTools = (userId: string) => ({
                     name: z.string(),
                     weekDay: z.enum(weekDayEnum.enumValues),
                     isRest: z.boolean(),
-                    // Importante: Google Tools não aceita enum vazio; evitar union com ''.
                     coverImageUrl: z.string().url().optional(),
                     estimatedDurationInSeconds: z.number(),
                     exercises: z.array(

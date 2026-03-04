@@ -1,8 +1,12 @@
-/** biome-ignore-all lint/style/useNamingConvention: Fastify RouteHandler generics use PascalCase */
+/** biome-ignore-all lint/style/useNamingConvention: <explanation> */
 import type { RouteHandler } from 'fastify';
-import type { ChatBodyDto } from '@/modules/ia/dto/ia.dto';
+import { z } from 'zod';
+import { ChatBodySchema, ChatResponseSchema } from '../schemas/ia.schema';
+
+export type ChatRequstBodySchema = z.infer<typeof ChatBodySchema>;
+export type ChatResponseSchema = z.infer<typeof ChatResponseSchema>;
 
 export type ChatHandler = RouteHandler<{
-    Body: ChatBodyDto;
-    Reply: unknown;
+    Body: ChatRequstBodySchema;
+    Reply: ChatResponseSchema;
 }>;
