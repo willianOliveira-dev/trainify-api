@@ -1,8 +1,8 @@
 import type { z } from 'zod';
 import type {
-    ChatBodySchema,
-    ChatMessageSchema,
-    WorkoutDaySchema,
+  ChatBodySchema,
+  ChatMessageSchema,
+  WorkoutDaySchema,
 } from '@/modules/ia/schemas/ia.schema';
 
 export type ChatBodyDto = z.infer<typeof ChatBodySchema>;

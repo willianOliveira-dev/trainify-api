@@ -13,7 +13,7 @@ const iaRoutes: FastifyPluginAsyncZod = async (app) => {
       body: ChatBodySchema,
       response: privateMutationResponse({
         201: ChatResponseSchema.describe('Resposta da IA'),
-      })
+      }),
     },
     handler: iaController.chat,
   });
