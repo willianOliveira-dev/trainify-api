@@ -10,6 +10,10 @@ const envSchema = z.object({
     .string()
     .default('http://localhost:3000')
     .transform((val) => val.split(',').map((origin) => origin.trim())),
+  googleClientId: z.string(),
+  googleClientSecret: z.string(),
+  betterAuthSecret: z.string(),
+  betterAuthUrl: z.string(),
   apiVersion: z.string().default('1.0.0'),
   host: z.string().default('0.0.0.0'),
 });
@@ -23,5 +27,7 @@ export const env = envSchema.parse({
   logLevel: process.env.LOG_LEVEL,
   allowedOrigins: process.env.ALLOWED_ORIGINS,
   apiVersion: process.env.API_VERSION,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   host: process.env.HOST,
 });

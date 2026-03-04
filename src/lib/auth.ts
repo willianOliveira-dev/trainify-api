@@ -6,13 +6,18 @@ import { db } from '../db/connection.js';
 import * as schema from '../db/schemas';
 
 export const auth = betterAuth({
+  baseURL: env.betterAuthUrl,
+  secret: env.betterAuthSecret,
   trustedOrigins: env.allowedOrigins,
+  socialProviders: {
+    google: {
+      clientId: env.googleClientId,
+      clientSecret: env.googleClientSecret,
+    },
+  },
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema: schema,
   }),
-  emailAndPassword: {
-    enabled: true,
-  },
   plugins: [openAPI()],
 });
