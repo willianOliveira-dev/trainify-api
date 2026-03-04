@@ -5,6 +5,7 @@ export const swaggerRoutes: FastifyPluginAsyncZod = async (app) => {
     method: 'GET',
     url: '/swagger.json',
     schema: {
+      operationId: 'getSwagger',
       hide: true,
     },
     handler: async () => {

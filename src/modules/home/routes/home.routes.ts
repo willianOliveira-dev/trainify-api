@@ -9,6 +9,7 @@ const home: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/home/:date', {
     schema: {
+      operationId: 'getHomeData',
       tags: ['Home'],
       summary: 'Retorna os dados da home com base em uma data',
       params: GetHomeParamsSchema,

@@ -9,6 +9,7 @@ const statsRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/stats', {
     schema: {
+      operationId: 'getStats',
       tags: ['Stats'],
       summary: 'Retorna as métricas de desempenho do usuário em um período',
       querystring: GetStatsQuerySchema,

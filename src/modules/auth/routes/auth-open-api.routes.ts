@@ -6,6 +6,7 @@ export const authOpenApiRoutes: FastifyPluginAsyncZod = async (app) => {
     method: 'GET',
     url: '/api/auth/open-api/generate-schema',
     schema: {
+      operationId: 'generateOpenApiSchema',
       hide: true,
     },
     handler: async () => {

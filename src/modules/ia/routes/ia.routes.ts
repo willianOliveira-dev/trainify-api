@@ -8,6 +8,7 @@ const iaRoutes: FastifyPluginAsyncZod = async (app) => {
 
   app.post('/chat', {
     schema: {
+      operationId: 'chat',
       tags: ['IA'],
       summary: 'Conversa com o personal trainer virtual',
       body: ChatBodySchema,
