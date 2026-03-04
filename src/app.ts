@@ -5,7 +5,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import { env } from '@/config/env';
-import { registerAppRouter } from '@/modules/index.route';
+import { registerAppRouter } from '@/modules/index.routes';
 import { registerPlugins } from '@/plugins';
 
 export async function boostrap() {

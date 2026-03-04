@@ -23,6 +23,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.30.3",
   "dependencies": {
+    "@ai-sdk/google": "^3.0.37",
     "@fastify/cors": "^11.2.0",
     "@fastify/helmet": "^13.0.2",
     "@fastify/multipart": "^9.4.0",
@@ -31,6 +32,7 @@
     "@fastify/swagger-ui": "^5.2.5",
     "@neondatabase/serverless": "^1.0.2",
     "@scalar/fastify-api-reference": "1.44.20",
+    "ai": "^6.0.111",
     "better-auth": "1.5.1",
     "dayjs": "^1.11.19",
     "dotenv": "17.3.1",

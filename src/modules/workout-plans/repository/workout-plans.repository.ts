@@ -317,6 +317,20 @@ class WorkoutPlansRepository {
 
     return result ?? null;
   }
+
+  async findByUserId(userId: string): Promise<WorkoutPlansListRepositoryDbOutput> {
+    const result = await db.query.workoutPlans.findMany({
+      where: (table, { eq }) => eq(table.userId, userId),
+      with: {
+        workoutDays: {
+          with: {
+            exercises: true,
+          },
+        },
+      },
+    });
+    return result;
+  }
 }
 
 const workoutPlansRepository = new WorkoutPlansRepository();
