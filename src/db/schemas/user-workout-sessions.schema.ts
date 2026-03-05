@@ -3,6 +3,7 @@ import { check, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { uuidv7 } from 'uuidv7';
 import { user } from './user.schema';
 import { workoutDays } from './workout-days.schema';
+import { workoutPlans } from './workout-plans.schema';
 
 export const userWorkoutSessions = pgTable(
   'user_workout_sessions',
@@ -13,6 +14,9 @@ export const userWorkoutSessions = pgTable(
     userId: text('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
+    workoutPlanId: text('workout_plan_id')
+      .notNull()
+      .references(() => workoutPlans.id, { onDelete: 'cascade' }),
     workoutDayId: text('workout_day_id')
       .notNull()
       .references(() => workoutDays.id, { onDelete: 'cascade' }),

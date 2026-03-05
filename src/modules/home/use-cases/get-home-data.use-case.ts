@@ -12,6 +12,8 @@ import {
   workoutPlansRepository,
 } from '../../workout-plans/repository/workout-plans.repository';
 import type { GetHomeResponseDto } from '../dto/get-home.dto';
+import { workoutSessionsRepository, WorkoutSessionsRepository } from '@/modules/workout-sessions/repositories/workout-sessions.repository';
+import { WEEKDAY_MAP } from '../constants/week-day-map.constant';
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);
@@ -26,7 +28,59 @@ class GetHomeDataUseCase {
   constructor(
     private readonly workoutPlansRepository: WorkoutPlansRepository,
     private readonly userWorkoutSessionsRepository: UserWorkoutSessionsRepository,
-  ) {}
+    private readonly workoutSessionsRepository: WorkoutSessionsRepository,
+  ) { }
+  
+  private async calculateStreak(
+  workoutPlanId: string,
+  workoutDays: {
+    weekDay: string;
+    isRest: boolean;
+    sessions: { startedAt: Date; completedAt: Date | null }[];
+  }[],
+  currentDate: dayjs.Dayjs,
+): Promise<number> {
+  const planWeekDays = new Set(workoutDays.map((d) => d.weekDay));
+  const restWeekDays = new Set(
+    workoutDays.filter((d) => d.isRest).map((d) => d.weekDay),
+  );
+
+  const allSessions = await this.workoutSessionsRepository.findCompletedSessionsByWorkoutPlanId(workoutPlanId);
+
+  const completedDates = new Set(
+    allSessions.map((s) => dayjs.utc(s.startedAt).format("YYYY-MM-DD")),
+  );
+
+  let streak = 0;
+  let day = currentDate.startOf('day'); 
+
+  
+  for (let i = 0; i < 365; i++) {
+    const weekDay = WEEKDAY_MAP[day.day()];
+
+    if (!planWeekDays.has(weekDay)) {
+      day = day.subtract(1, "day");
+      continue;
+    }
+
+    if (restWeekDays.has(weekDay)) {
+      streak++;
+      day = day.subtract(1, "day");
+      continue;
+    }
+
+    const dateKey = day.format("YYYY-MM-DD");
+    if (completedDates.has(dateKey)) {
+      streak++;
+      day = day.subtract(1, "day");
+      continue;
+    }
+    
+    break;
+  }
+
+  return streak;
+}
 
   async execute(input: GetHomeDataInput): Promise<GetHomeResponseDto> {
     const inputDate = dayjs.utc(input.date);
@@ -71,32 +125,33 @@ class GetHomeDataUseCase {
       };
     }
 
-    const currentWeekDay = inputDate.format('dddd').toLowerCase() as
-      | 'monday'
-      | 'tuesday'
-      | 'wednesday'
-      | 'thursday'
-      | 'friday'
-      | 'saturday'
-      | 'sunday';
-    const todaysWorkoutDay = activePlan.workoutDays.find((day) => day.weekDay === currentWeekDay);
+     const todayWeekDay = WEEKDAY_MAP[inputDate.day()];
+     const todayWorkoutDay = activePlan.workoutDays.find(
+      (day) => day.weekDay === todayWeekDay,
+    );
 
-    if (!todaysWorkoutDay) {
-      throw new Error('Configuração de dias do plano de treino inválida.');
-    }
 
-    const todayWorkoutDayPayload = {
+    const todayWorkoutDayPayload =  todayWorkoutDay ? {
       workoutPlanId: activePlan.id,
-      id: todaysWorkoutDay.id,
-      name: todaysWorkoutDay.name,
-      isRest: todaysWorkoutDay.isRest,
-      weekDay: todaysWorkoutDay.weekDay,
-      estimatedDurationInSeconds: todaysWorkoutDay.estimatedDurationInSeconds ?? 0,
-      coverImageUrl: todaysWorkoutDay.coverImageUrl ?? undefined,
-      exercisesCount: todaysWorkoutDay.exercises.length,
-    };
-
-    const workoutStreak = 0;
+      id: todayWorkoutDay.id,
+      name: todayWorkoutDay.name,
+      isRest: todayWorkoutDay.isRest,
+      weekDay: todayWorkoutDay.weekDay,
+      estimatedDurationInSeconds: todayWorkoutDay.estimatedDurationInSeconds ?? 0,
+      coverImageUrl: todayWorkoutDay.coverImageUrl ?? undefined,
+      exercisesCount: todayWorkoutDay.exercises.length,
+    }: undefined;
+    console.log(activePlan.workoutDays)
+    const workoutStreak = await this.calculateStreak(activePlan.id, activePlan.workoutDays.map((day) => ({
+        weekDay: day.weekDay,
+        isRest: day.isRest,
+        sessions: day.sessions.map((session) => 
+        ({
+          startedAt: session.startedAt,
+          completedAt: session.completedAt,
+        })
+        ),
+    })), inputDate);
 
     return {
       activeWorkoutPlanId: activePlan.id,
@@ -110,6 +165,10 @@ class GetHomeDataUseCase {
 const getHomeDataUseCase = new GetHomeDataUseCase(
   workoutPlansRepository,
   userWorkoutSessionsRepository,
+  workoutSessionsRepository,
 );
 
 export { GetHomeDataUseCase, getHomeDataUseCase };
+
+
+

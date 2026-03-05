@@ -5,6 +5,7 @@ import type {
   CreateWorkoutPlanRepositoryInput,
   UpdateWorkoutPlanRepositoryInput,
   WorkoutDayDetailsRepositoryDbOutput,
+  WorkoutPlanActiveByUserDbOutput,
   WorkoutPlanDetailsRepositoryDbOutput,
   WorkoutPlanRepositoryDbOutput,
   WorkoutPlansListRepositoryDbOutput,
@@ -303,13 +304,14 @@ class WorkoutPlansRepository {
     return result ?? null;
   }
 
-  async findActiveByUserId(userId: string): Promise<WorkoutPlanRepositoryDbOutput | null> {
+  async findActiveByUserId(userId: string): Promise<WorkoutPlanActiveByUserDbOutput | null> {
     const result = await db.query.workoutPlans.findFirst({
       where: (table, { and, eq }) => and(eq(table.isActive, true), eq(table.userId, userId)),
       with: {
         workoutDays: {
           with: {
             exercises: true,
+            sessions: true
           },
         },
       },
