@@ -12,9 +12,9 @@ export async function registerAppRouter(app: FastifyInstance): Promise<void> {
   await app.register(swaggerRoutes);
   await app.register(authOpenApiRoutes);
   await app.register(authRoutes);
-  await app.register(workoutPlans, { prefix: '/api/v1' });
-  await app.register(home, { prefix: '/api/v1' });
-  await app.register(statsRoutes, { prefix: '/api/v1' });
-  await app.register(usersRoutes, { prefix: '/api/v1' });
-  await app.register(iaRoutes, { prefix: '/api/v1/ia' });
+  await app.register(workoutPlans, { prefix: '/trainify/api/v1' });
+  await app.register(home, { prefix: '/trainify/api/v1' });
+  await app.register(statsRoutes, { prefix: '/trainify/api/v1' });
+  await app.register(usersRoutes, { prefix: '/trainify/api/v1' });
+  await app.register(iaRoutes, { prefix: '/trainify/api/v1/ia' });
 }

@@ -3,7 +3,9 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { auth } from '@/lib/auth';
 
 export const authRoutes: FastifyPluginAsyncZod = async (app) => {
-  app.all('/api/auth/*', async (request, reply) => {
+  app.all('/api/auth/*', {
+     schema: { hide: true },
+  }, async (request, reply) => {
     const url = new URL(request.url, `${request.protocol}://${request.hostname}`).toString();
     const response = await auth.handler(
       new Request(url, {
