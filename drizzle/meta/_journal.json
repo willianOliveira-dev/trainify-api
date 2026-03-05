@@ -22,6 +22,20 @@
       "when": 1772579089813,
       "tag": "0002_robust_gorgon",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1772718827250,
+      "tag": "0003_confused_vance_astro",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772719615135,
+      "tag": "0004_high_stryfe",
+      "breakpoints": true
     }
   ]
 }

@@ -30,7 +30,6 @@ class GetHomeDataUseCase {
 
   async execute(input: GetHomeDataInput): Promise<GetHomeResponseDto> {
     const inputDate = dayjs.utc(input.date);
-
     const startOfWeek = inputDate.startOf('week');
     const endOfWeek = inputDate.endOf('week');
 
@@ -39,7 +38,7 @@ class GetHomeDataUseCase {
     if (!activePlan) {
       throw new WorkoutPlanNotFoundError();
     }
-
+    
     const sessionsInWeek = await this.userWorkoutSessionsRepository.findSessionsByDateRange(
       input.userId,
       startOfWeek.toDate(),
