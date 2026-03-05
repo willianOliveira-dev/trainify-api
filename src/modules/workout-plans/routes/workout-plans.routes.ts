@@ -41,7 +41,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 
   app.patch('/workout-plans/:id/days/:dayId/sessions/:sessionId', {
     schema: {
-      operationId: 'updateSession',
+      operationId: 'updateSessionData',
       tags: ['Workout Plans'],
       summary: 'Atualiza uma sessão de treino',
       params: UpdateWorkoutSessionParamsSchema,
@@ -56,7 +56,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 
   app.post('/workout-plans', {
     schema: {
-      operationId: 'createWorkoutPlan',
+      operationId: 'createWorkoutPlanData',
       tags: ['Workout Plans'],
       summary: 'Cria um novo plano de treino',
       body: CreateWorkoutPlanSchema,
@@ -70,7 +70,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/workout-plans', {
     schema: {
-      operationId: 'findAllWorkoutPlans',
+      operationId: 'getAllWorkoutPlansData',
       tags: ['Workout Plans'],
       summary: 'Retorna todos os planos de treino',
       response: privateResponse({
@@ -82,7 +82,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/workout-plans/:id', {
     schema: {
-      operationId: 'findWorkoutPlanById',
+      operationId: 'getWorkoutPlanByIdData',
       tags: ['Workout Plans'],
       summary: 'Retorna um plano de treino',
       params: WorkoutPlanParamsSchema,
@@ -96,7 +96,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/workout-plans/:id/days/:dayId', {
     schema: {
-      operationId: 'findWorkoutPlanDayDetails',
+      operationId: 'getWorkoutPlanDayDetailsData',
       tags: ['Workout Plans'],
       summary: 'Retorna os detalhes de um dia do plano',
       params: WorkoutPlanDayParamsSchema,
