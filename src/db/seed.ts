@@ -13,15 +13,6 @@ const daysAgo = (n: number): Date => {
   return d;
 };
 
-const hoursAgo = (n: number): Date => {
-  const d = new Date();
-  d.setHours(d.getHours() - n);
-  return d;
-};
-
-const addMinutes = (date: Date, minutes: number): Date =>
-  new Date(date.getTime() + minutes * 60_000);
-
 const avatar = (seed: string) =>
   `https://api.dicebear.com/8.x/adventurer/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
 
