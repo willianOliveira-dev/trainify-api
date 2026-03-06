@@ -21,7 +21,7 @@ class GetWorkoutPlanDetailsUseCase {
     userId,
   }: GetWorkoutPlanDetailsUseCaseInput): Promise<GetWorkoutPlanDetailsUseCaseOutput> {
     const workoutPlan = await this.workoutPlansRepository.findDetailsById(id);
-
+    
     if (!workoutPlan) {
       throw new WorkoutPlanNotFoundError();
     }

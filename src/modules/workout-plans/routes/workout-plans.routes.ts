@@ -82,7 +82,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 
   app.get('/workout-plans/:id', {
     schema: {
-      operationId: 'getWorkoutPlanByIdData',
+      operationId: 'getWorkoutPlanDetailsdData',
       tags: ['Workout Plans'],
       summary: 'Retorna um plano de treino',
       params: WorkoutPlanParamsSchema,
