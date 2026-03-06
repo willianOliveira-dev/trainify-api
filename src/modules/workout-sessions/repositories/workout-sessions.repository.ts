@@ -3,7 +3,6 @@ import { userWorkoutSessions } from "@/db/schemas";
 import { eq } from "drizzle-orm";
 
 class WorkoutSessionsRepository {
-
   async create(data: { userId: string; workoutDayId: string; workoutPlanId: string }): Promise<{
     id: string;
     startedAt: Date | null;
@@ -17,6 +16,7 @@ class WorkoutSessionsRepository {
         userId: data.userId,
         workoutDayId: data.workoutDayId,
         workoutPlanId: data.workoutPlanId,
+        startedAt: new Date(),
       })
       .returning({
         id: userWorkoutSessions.id,
@@ -41,7 +41,7 @@ class WorkoutSessionsRepository {
         and(
           eq(table.workoutDayId, workoutDayId),
           gte(table.startedAt, startOfDay),
-          lte(table.startedAt, endOfDay),
+          lte(table.startedAt, endOfDay)
         ),
     });
 
@@ -75,33 +75,39 @@ class WorkoutSessionsRepository {
   async findSessionsByDateRange(userId: string, startAt: Date, endAt: Date) {
     const sessions = await db.query.userWorkoutSessions.findMany({
       where: (table, { and, eq, gte, lte }) =>
-        and(eq(table.userId, userId), gte(table.startedAt, startAt), lte(table.startedAt, endAt)),
+        and(
+          eq(table.userId, userId), 
+          gte(table.startedAt, startAt), 
+          lte(table.startedAt, endAt)
+        ),
     });
 
     return sessions;
   }
 
-  async findCompletedSessionsByWorkoutPlanId(workoutPlanId: string): Promise<{ startedAt: Date  |  null}[]> {
-      return db.query.userWorkoutSessions.findMany({
-        where: (userWorkoutSessions, { eq, and, isNotNull })=> and(
-          eq(userWorkoutSessions.workoutDayId, workoutPlanId),
-          isNotNull(userWorkoutSessions.completedAt)
-        ),
-        columns: {
-          startedAt: true,
-        }
-    })
+  async findCompletedSessionsByWorkoutPlanId(workoutPlanId: string): Promise<{ startedAt: Date | null }[]> {
+    const sessions = await db.query.userWorkoutSessions.findMany({
+      where: (table, { and, eq, isNotNull }) =>
+        and(eq(table.workoutPlanId, workoutPlanId), isNotNull(table.completedAt)),
+      columns: {
+        startedAt: true,
+      },
+    });
+
+    return sessions;
   }
 
-  async findTodaySessionsByWorkoutDayId(workoutDayId: string): Promise<{
-    id: string;
-    workoutDayId: string;
-    startedAt: Date | null;
-    completedAt: Date | null;
-  }[]> {
+  async findTodaySessionsByWorkoutDayId(workoutDayId: string): Promise<
+    {
+      id: string;
+      workoutDayId: string;
+      startedAt: Date | null;
+      completedAt: Date | null;
+    }[]
+  > {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -126,4 +132,4 @@ class WorkoutSessionsRepository {
 
 const workoutSessionsRepository = new WorkoutSessionsRepository();
 
-export { WorkoutSessionsRepository, workoutSessionsRepository }
+export { WorkoutSessionsRepository, workoutSessionsRepository };

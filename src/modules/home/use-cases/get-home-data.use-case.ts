@@ -20,7 +20,6 @@ interface GetHomeDataInput {
   userId: string;
 }
 
-
 type WorkoutDayWithSessions = {
   weekDay: string;
   isRest: boolean;
@@ -86,8 +85,15 @@ class GetHomeDataUseCase {
 
   async execute(input: GetHomeDataInput): Promise<GetHomeResponseDto> {
     const inputDate = dayjs.utc(input.date);
+    
     const startOfWeek = inputDate.startOf('week');
-    const endOfWeek = inputDate.endOf('week');
+    const endOfWeek = inputDate.endOf('week'); 
+
+    console.log('Date range:', {
+      start: startOfWeek.format('YYYY-MM-DD'),
+      end: endOfWeek.format('YYYY-MM-DD'),
+      inputDate: inputDate.format('YYYY-MM-DD')
+    });
 
     const activePlan = await this.workoutPlansRepository.findActiveByUserId(input.userId);
 
@@ -111,14 +117,12 @@ class GetHomeDataUseCase {
       const formattedDate = currentDate.format('YYYY-MM-DD');
 
       const sessionsForCurrentDate = sessionsInWeek.filter((session) => {
-
         if (!session.startedAt) return false;
         
         const sessionDate = dayjs(session.startedAt).utc();
-        return (
-          sessionDate.isSameOrAfter(currentDate.startOf('day')) &&
-          sessionDate.isSameOrBefore(currentDate.endOf('day'))
-        );
+        const isSameDay = sessionDate.isSame(currentDate, 'day');
+        
+        return isSameDay;
       });
 
       const started = sessionsForCurrentDate.length > 0;
@@ -145,7 +149,6 @@ class GetHomeDataUseCase {
       coverImageUrl: todayWorkoutDay.coverImageUrl ?? undefined,
       exercisesCount: todayWorkoutDay.exercises.length,
     } : undefined;
-
 
     const workoutDaysWithSessions = activePlan.workoutDays.map((day) => ({
       weekDay: day.weekDay,
