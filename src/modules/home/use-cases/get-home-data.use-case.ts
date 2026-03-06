@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
-import { WorkoutPlanNotFoundError } from '@/shared/errors/workout-plan.error';
 import {
   type WorkoutPlansRepository,
   workoutPlansRepository,
@@ -92,7 +91,12 @@ class GetHomeDataUseCase {
     const activePlan = await this.workoutPlansRepository.findActiveByUserId(input.userId);
 
     if (!activePlan) {
-      throw new WorkoutPlanNotFoundError();
+     return {
+      activeWorkoutPlanId: "",
+      todayWorkoutDay: null,
+      workoutStreak: 0,
+      consistencyByDay: {},
+    };
     }
     
     const sessionsInWeek = await this.workoutSessionsRepository.findSessionsByDateRange(
@@ -140,9 +144,9 @@ class GetHomeDataUseCase {
       isRest: todayWorkoutDay.isRest,
       weekDay: todayWorkoutDay.weekDay,
       estimatedDurationInSeconds: todayWorkoutDay.estimatedDurationInSeconds ?? 0,
-      coverImageUrl: todayWorkoutDay.coverImageUrl ?? undefined,
+      coverImageUrl: todayWorkoutDay.coverImageUrl ?? null,
       exercisesCount: todayWorkoutDay.exercises.length,
-    } : undefined;
+    } : null;
 
     const workoutDaysWithSessions = activePlan.workoutDays.map((day) => ({
       weekDay: day.weekDay,

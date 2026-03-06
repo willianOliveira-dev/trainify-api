@@ -43,7 +43,7 @@ const USERS_CONFIG = [
   },
   {
     name: 'Willian Oliveira',
-    email: 'willian@gmail.com',
+    email: 'willian@example.com',
     emailVerified: true,
     image: avatar('willian-oliveira'),
   },

@@ -21,9 +21,9 @@ export const GetHomeResponseSchema = z.object({
     isRest: z.boolean(),
     weekDay: z.enum(weekDayEnum.enumValues),
     estimatedDurationInSeconds: z.number(),
-    coverImageUrl: z.string().optional(),
+    coverImageUrl: z.string().nullable(),
     exercisesCount: z.number(),
-  }).optional(),
+  }).nullable(),
   workoutStreak: z.number(),
-  consistencyByDay: z.record(z.iso.date(), ConsistencyDaySchema),
+  consistencyByDay: z.record(z.iso.date(), ConsistencyDaySchema).nullable(),
 });
