@@ -97,26 +97,28 @@ class WorkoutSessionsRepository {
     return sessions;
   }
 
-  async findTodaySessionsByWorkoutDayId(workoutDayId: string): Promise<
-    {
-      id: string;
-      workoutDayId: string;
-      startedAt: Date | null;
-      completedAt: Date | null;
-    }[]
-  > {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+  async findSessionsByWorkoutDayIdAndDate(
+    workoutDayId: string, 
+    date: Date
+  ): Promise<{
+    id: string;
+    workoutDayId: string;
+    startedAt: Date | null;
+    completedAt: Date | null;
+  }[]> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
 
     const sessions = await db.query.userWorkoutSessions.findMany({
-      where: (table, { and, eq, gte, lt }) =>
+      where: (table, { and, eq, gte, lte }) =>
         and(
           eq(table.workoutDayId, workoutDayId),
-          gte(table.startedAt, today),
-          lt(table.startedAt, tomorrow)
+          gte(table.startedAt, startOfDay),
+          lte(table.startedAt, endOfDay)
         ),
       columns: {
         id: true,

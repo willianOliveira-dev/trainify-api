@@ -89,12 +89,6 @@ class GetHomeDataUseCase {
     const startOfWeek = inputDate.startOf('week');
     const endOfWeek = inputDate.endOf('week'); 
 
-    console.log('Date range:', {
-      start: startOfWeek.format('YYYY-MM-DD'),
-      end: endOfWeek.format('YYYY-MM-DD'),
-      inputDate: inputDate.format('YYYY-MM-DD')
-    });
-
     const activePlan = await this.workoutPlansRepository.findActiveByUserId(input.userId);
 
     if (!activePlan) {

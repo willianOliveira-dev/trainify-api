@@ -1618,106 +1618,107 @@ async function seed() {
     dayToPlanMap.set(day.id, day.workoutPlanId);
   }
 
-  const buildSessions = (userIdsMap: Record<number, string>): UserWorkoutSessionInsert[] => {
-    const sessions: UserWorkoutSessionInsert[] = [];
+ const buildSessions = (userIdsMap: Record<number, string>): UserWorkoutSessionInsert[] => {
+  const sessions: UserWorkoutSessionInsert[] = [];
 
-    const lucasDayRotation = [
-      dayIds.lucasPush,
-      dayIds.lucasPull,
-      dayIds.lucasLegs,
-      dayIds.lucasPush2,
-      dayIds.lucasPull2,
-    ];
-    const lucasDurations = [4100, 4350, 4700, 4400, 4300];
-    [0, 1, 2, 4, 5, 7, 8, 9, 11, 12, 14, 15, 16, 18, 19, 21, 22].forEach((daysBack, i) => {
-      const dayIndex = i % lucasDayRotation.length;
-      const workoutDayId = lucasDayRotation[dayIndex];
-      const started = hoursAgo(daysBack * 24 + 18);
-      sessions.push({
-        id: uuidv7(),
-        userId: userIdsMap[0],
-        workoutPlanId: dayToPlanMap.get(workoutDayId)!,
-        workoutDayId,
-        startedAt: started,
-        completedAt: addMinutes(started, Math.floor(lucasDurations[dayIndex] / 60)),
-      });
+  const weekDates = {
+    monday: new Date('2026-03-02T10:00:00Z'),
+    tuesday: new Date('2026-03-03T10:00:00Z'),
+    wednesday: new Date('2026-03-04T10:00:00Z'),
+    thursday: new Date('2026-03-05T10:00:00Z'),
+    friday: new Date('2026-03-06T10:00:00Z'),
+    saturday: new Date('2026-03-07T10:00:00Z'),
+    sunday: new Date('2026-03-08T10:00:00Z'),
+  };
+
+  const rafaelWorkoutDays = [
+    { dayId: dayIds.rafaelSquat, date: weekDates.monday, duration: 88 },    
+    { dayId: dayIds.rafaelBench, date: weekDates.tuesday, duration: 85 },    
+    { dayId: dayIds.rafaelDeadlift, date: weekDates.thursday, duration: 92 }, 
+    { dayId: dayIds.rafaelOhp, date: weekDates.friday, duration: 78 },     
+  ];
+
+  rafaelWorkoutDays.forEach(({ dayId, date, duration }) => {
+    sessions.push({
+      id: uuidv7(),
+      userId: userIdsMap[2],
+      workoutPlanId: dayToPlanMap.get(dayId)!,
+      workoutDayId: dayId,
+      startedAt: date,
+      completedAt: new Date(date.getTime() + duration * 60 * 1000),
     });
+  });
 
-    const fernandaDayRotation = [
-      dayIds.fernandaUpper,
-      dayIds.fernandaLower,
-      dayIds.fernandaCore,
-      dayIds.fernandaCardio,
-    ];
-    const fernandaDurations = [55, 58, 43, 48];
-    [0, 2, 4, 7, 9, 11, 14, 16, 18, 21, 23].forEach((daysBack, i) => {
-      const dayIndex = i % fernandaDayRotation.length;
-      const workoutDayId = fernandaDayRotation[dayIndex];
-      const started = hoursAgo(daysBack * 24 + 19);
-      sessions.push({
-        id: uuidv7(),
-        userId: userIdsMap[1],
-        workoutPlanId: dayToPlanMap.get(workoutDayId)!,
-        workoutDayId,
-        startedAt: started,
-        completedAt: addMinutes(started, fernandaDurations[dayIndex]),
-      });
-    });
 
-    const rafaelDayRotation = [
-      dayIds.rafaelSquat,
-      dayIds.rafaelBench,
-      dayIds.rafaelDeadlift,
-      dayIds.rafaelOhp,
-    ];
-    const rafaelDurations = [88, 85, 92, 78];
-    [0, 1, 3, 4, 7, 8, 10, 11, 14, 15, 17, 18, 21, 22, 24, 25].forEach((daysBack, i) => {
-      const dayIndex = i % rafaelDayRotation.length;
-      const workoutDayId = rafaelDayRotation[dayIndex];
-      const started = hoursAgo(daysBack * 24 + 17);
-      sessions.push({
-        id: uuidv7(),
-        userId: userIdsMap[2],
-        workoutPlanId: dayToPlanMap.get(workoutDayId)!,
-        workoutDayId,
-        startedAt: started,
-        completedAt: addMinutes(started, rafaelDurations[dayIndex]),
-      });
-    });
+  const lucasWorkoutDays = [
+    { dayId: dayIds.lucasPush, date: weekDates.monday, duration: 68 }, 
+    { dayId: dayIds.lucasPull, date: weekDates.tuesday, duration: 72 },  
+    { dayId: dayIds.lucasLegs, date: weekDates.wednesday, duration: 78 },
+    { dayId: dayIds.lucasPush2, date: weekDates.friday, duration: 75 },   
+    { dayId: dayIds.lucasPull2, date: weekDates.saturday, duration: 71 }, 
+  ];
 
-    const beatrizDayRotation = [
-      dayIds.beatrizHiit1,
-      dayIds.beatrizMobility,
-      dayIds.beatrizHiit2,
-      dayIds.beatrizHiit3,
-      dayIds.beatrizMobility2,
-    ];
-    const beatrizDurations = [38, 48, 37, 42, 58];
-    [0, 2, 4, 7, 9, 11].forEach((daysBack, i) => {
-      const dayIndex = i % beatrizDayRotation.length;
-      const workoutDayId = beatrizDayRotation[dayIndex];
-      const started = hoursAgo(daysBack * 24 + 7);
-      sessions.push({
-        id: uuidv7(),
-        userId: userIdsMap[3],
-        workoutPlanId: dayToPlanMap.get(workoutDayId)!,
-        workoutDayId,
-        startedAt: started,
-        completedAt: addMinutes(started, beatrizDurations[dayIndex]),
-      });
-    });
-
+  lucasWorkoutDays.forEach(({ dayId, date, duration }) => {
     sessions.push({
       id: uuidv7(),
       userId: userIdsMap[0],
-      workoutPlanId: dayToPlanMap.get(dayIds.lucasPush)!,
-      workoutDayId: dayIds.lucasPush,
-      startedAt: hoursAgo(1),
-      completedAt: null,
+      workoutPlanId: dayToPlanMap.get(dayId)!,
+      workoutDayId: dayId,
+      startedAt: date,
+      completedAt: new Date(date.getTime() + duration * 60 * 1000),
     });
+  });
 
-    return sessions;
-  };
+
+  const fernandaWorkoutDays = [
+    { dayId: dayIds.fernandaUpper, date: weekDates.monday, duration: 55 },   
+    { dayId: dayIds.fernandaLower, date: weekDates.tuesday, duration: 58 },   
+    { dayId: dayIds.fernandaCore, date: weekDates.wednesday, duration: 43 },  
+    { dayId: dayIds.fernandaCardio, date: weekDates.friday, duration: 48 },   
+  ];
+
+  fernandaWorkoutDays.forEach(({ dayId, date, duration }) => {
+    sessions.push({
+      id: uuidv7(),
+      userId: userIdsMap[1],
+      workoutPlanId: dayToPlanMap.get(dayId)!,
+      workoutDayId: dayId,
+      startedAt: date,
+      completedAt: new Date(date.getTime() + duration * 60 * 1000),
+    });
+  });
+
+
+  const beatrizWorkoutDays = [
+    { dayId: dayIds.beatrizHiit1, date: weekDates.monday, duration: 38 },    
+    { dayId: dayIds.beatrizMobility, date: weekDates.tuesday, duration: 48 }, 
+    { dayId: dayIds.beatrizHiit2, date: weekDates.wednesday, duration: 37 }, 
+    { dayId: dayIds.beatrizHiit3, date: weekDates.friday, duration: 42 },   
+    { dayId: dayIds.beatrizMobility2, date: weekDates.saturday, duration: 58 }, 
+  ];
+
+  beatrizWorkoutDays.forEach(({ dayId, date, duration }) => {
+    sessions.push({
+      id: uuidv7(),
+      userId: userIdsMap[3],
+      workoutPlanId: dayToPlanMap.get(dayId)!,
+      workoutDayId: dayId,
+      startedAt: date,
+      completedAt: new Date(date.getTime() + duration * 60 * 1000),
+    });
+  });
+
+  sessions.push({
+    id: uuidv7(),
+    userId: userIdsMap[2],
+    workoutPlanId: dayToPlanMap.get(dayIds.rafaelOhp)!,
+    workoutDayId: dayIds.rafaelOhp,
+    startedAt: new Date('2026-03-06T17:40:00Z'),
+    completedAt: null, 
+  });
+
+  return sessions;
+};
 
   console.log('📋 Inserindo planos de treino...');
   await db.insert(schema.workoutPlans).values(workoutPlans);

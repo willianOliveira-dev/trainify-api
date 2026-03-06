@@ -11,6 +11,7 @@ import type {
   WorkoutPlansListRepositoryDbOutput,
 } from '@/modules/workout-plans/repository/workout-plans.repository.types';
 import { workoutSessionsRepository } from '@/modules/workout-sessions/repositories/workout-sessions.repository';
+import { getTargetDateFromWeekDay } from '../helpers/get-target-date-from-week-day.helper';
 
 class WorkoutPlansRepository {
   async create(data: CreateWorkoutPlanRepositoryInput): Promise<WorkoutPlanRepositoryDbOutput> {
@@ -125,10 +126,10 @@ class WorkoutPlansRepository {
   }
 
   async findDayDetailsById(
-    planId: string,
-    dayId: string,
-  ): Promise<WorkoutDayDetailsRepositoryDbOutput | null> {
-    const workoutDayData = await db.query.workoutDays.findFirst({
+  planId: string,
+  dayId: string,
+): Promise<WorkoutDayDetailsRepositoryDbOutput | null> {
+  const workoutDayData = await db.query.workoutDays.findFirst({
     where: (table, { and, eq }) =>
       and(eq(table.id, dayId), eq(table.workoutPlanId, planId)),
     with: {
@@ -139,9 +140,14 @@ class WorkoutPlansRepository {
     },
   });
 
-    if (!workoutDayData) return null;
-    
-  const todaySessions = await workoutSessionsRepository.findTodaySessionsByWorkoutDayId(dayId);
+  if (!workoutDayData) return null;
+  
+  const targetDate = getTargetDateFromWeekDay(workoutDayData.weekDay);
+  
+  const sessionsForDate = await workoutSessionsRepository.findSessionsByWorkoutDayIdAndDate(
+    dayId, 
+    targetDate
+  );
 
   return {
     id: workoutDayData.id,
@@ -160,14 +166,14 @@ class WorkoutPlansRepository {
       restTimeInSeconds: exercise.restTimeInSeconds,
       workoutDayId: exercise.workoutDayId,  
     })),
-    sessions: todaySessions.map(session => ({
+    sessions: sessionsForDate.map(session => ({
       id: session.id,
       workoutDayId: session.workoutDayId,
       startedAt: session.startedAt,
       completedAt: session.completedAt,
     })),
   };
-  }
+}
 
   async findAll(): Promise<WorkoutPlansListRepositoryDbOutput> {
     const result = await db.query.workoutPlans.findMany({
