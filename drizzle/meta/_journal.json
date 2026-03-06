@@ -8,6 +8,13 @@
       "when": 1772726272805,
       "tag": "0000_mighty_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772809492511,
+      "tag": "0001_premium_echo",
+      "breakpoints": true
     }
   ]
 }

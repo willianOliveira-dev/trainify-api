@@ -4,10 +4,6 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
 import { WorkoutPlanNotFoundError } from '@/shared/errors/workout-plan.error';
 import {
-  type UserWorkoutSessionsRepository,
-  userWorkoutSessionsRepository,
-} from '../../workout-plans/repository/user-workout-sessions.repository';
-import {
   type WorkoutPlansRepository,
   workoutPlansRepository,
 } from '../../workout-plans/repository/workout-plans.repository';
@@ -24,63 +20,69 @@ interface GetHomeDataInput {
   userId: string;
 }
 
+
+type WorkoutDayWithSessions = {
+  weekDay: string;
+  isRest: boolean;
+  sessions: {
+    startedAt: Date | null;
+    completedAt: Date | null;
+  }[];
+};
+
 class GetHomeDataUseCase {
   constructor(
     private readonly workoutPlansRepository: WorkoutPlansRepository,
-    private readonly userWorkoutSessionsRepository: UserWorkoutSessionsRepository,
     private readonly workoutSessionsRepository: WorkoutSessionsRepository,
   ) { }
   
   private async calculateStreak(
-  workoutPlanId: string,
-  workoutDays: {
-    weekDay: string;
-    isRest: boolean;
-    sessions: { startedAt: Date; completedAt: Date | null }[];
-  }[],
-  currentDate: dayjs.Dayjs,
-): Promise<number> {
-  const planWeekDays = new Set(workoutDays.map((d) => d.weekDay));
-  const restWeekDays = new Set(
-    workoutDays.filter((d) => d.isRest).map((d) => d.weekDay),
-  );
+    workoutPlanId: string,
+    workoutDays: WorkoutDayWithSessions[], 
+    currentDate: dayjs.Dayjs,
+  ): Promise<number> {
+    const planWeekDays = new Set(workoutDays.map((d) => d.weekDay));
+    const restWeekDays = new Set(
+      workoutDays.filter((d) => d.isRest).map((d) => d.weekDay),
+    );
 
-  const allSessions = await this.workoutSessionsRepository.findCompletedSessionsByWorkoutPlanId(workoutPlanId);
+    const allSessions = await this.workoutSessionsRepository.findCompletedSessionsByWorkoutPlanId(workoutPlanId);
 
-  const completedDates = new Set(
-    allSessions.map((s) => dayjs.utc(s.startedAt).format("YYYY-MM-DD")),
-  );
+    const completedDates = new Set(
+      allSessions
+        .filter(s => s.startedAt !== null) 
+        .map((s) => dayjs.utc(s.startedAt!).format("YYYY-MM-DD")),
+    );
 
-  let streak = 0;
-  let day = currentDate.startOf('day'); 
+    let streak = 0;
+    let day = currentDate.startOf('day'); 
 
-  
-  for (let i = 0; i < 365; i++) {
-    const weekDay = WEEKDAY_MAP[day.day()];
+    for (let i = 0; i < 365; i++) {
+      const weekDay = WEEKDAY_MAP[day.day()];
 
-    if (!planWeekDays.has(weekDay)) {
-      day = day.subtract(1, "day");
-      continue;
+      if (!planWeekDays.has(weekDay)) {
+        day = day.subtract(1, "day");
+        continue;
+      }
+
+      if (restWeekDays.has(weekDay)) {
+        streak++;
+        day = day.subtract(1, "day");
+        continue;
+      }
+
+      const dateKey = day.format("YYYY-MM-DD");
+      if (completedDates.has(dateKey)) {
+        streak++;
+        day = day.subtract(1, "day");
+        continue;
+      }
+      
+      break;
     }
 
-    if (restWeekDays.has(weekDay)) {
-      streak++;
-      day = day.subtract(1, "day");
-      continue;
-    }
-
-    const dateKey = day.format("YYYY-MM-DD");
-    if (completedDates.has(dateKey)) {
-      streak++;
-      day = day.subtract(1, "day");
-      continue;
-    }
-    
-    break;
+    return streak;
   }
-
-  return streak;
-}
 
   async execute(input: GetHomeDataInput): Promise<GetHomeResponseDto> {
     const inputDate = dayjs.utc(input.date);
@@ -93,7 +95,7 @@ class GetHomeDataUseCase {
       throw new WorkoutPlanNotFoundError();
     }
     
-    const sessionsInWeek = await this.userWorkoutSessionsRepository.findSessionsByDateRange(
+    const sessionsInWeek = await this.workoutSessionsRepository.findSessionsByDateRange(
       input.userId,
       startOfWeek.toDate(),
       endOfWeek.toDate(),
@@ -109,6 +111,9 @@ class GetHomeDataUseCase {
       const formattedDate = currentDate.format('YYYY-MM-DD');
 
       const sessionsForCurrentDate = sessionsInWeek.filter((session) => {
+
+        if (!session.startedAt) return false;
+        
         const sessionDate = dayjs(session.startedAt).utc();
         return (
           sessionDate.isSameOrAfter(currentDate.startOf('day')) &&
@@ -125,13 +130,12 @@ class GetHomeDataUseCase {
       };
     }
 
-     const todayWeekDay = WEEKDAY_MAP[inputDate.day()];
-     const todayWorkoutDay = activePlan.workoutDays.find(
+    const todayWeekDay = WEEKDAY_MAP[inputDate.day()];
+    const todayWorkoutDay = activePlan.workoutDays.find(
       (day) => day.weekDay === todayWeekDay,
     );
 
-
-    const todayWorkoutDayPayload =  todayWorkoutDay ? {
+    const todayWorkoutDayPayload = todayWorkoutDay ? {
       workoutPlanId: activePlan.id,
       id: todayWorkoutDay.id,
       name: todayWorkoutDay.name,
@@ -140,18 +144,23 @@ class GetHomeDataUseCase {
       estimatedDurationInSeconds: todayWorkoutDay.estimatedDurationInSeconds ?? 0,
       coverImageUrl: todayWorkoutDay.coverImageUrl ?? undefined,
       exercisesCount: todayWorkoutDay.exercises.length,
-    }: undefined;
-    console.log(activePlan.workoutDays)
-    const workoutStreak = await this.calculateStreak(activePlan.id, activePlan.workoutDays.map((day) => ({
-        weekDay: day.weekDay,
-        isRest: day.isRest,
-        sessions: day.sessions.map((session) => 
-        ({
-          startedAt: session.startedAt,
-          completedAt: session.completedAt,
-        })
-        ),
-    })), inputDate);
+    } : undefined;
+
+
+    const workoutDaysWithSessions = activePlan.workoutDays.map((day) => ({
+      weekDay: day.weekDay,
+      isRest: day.isRest,
+      sessions: day.sessions.map((session) => ({
+        startedAt: session.startedAt, 
+        completedAt: session.completedAt,
+      })),
+    }));
+
+    const workoutStreak = await this.calculateStreak(
+      activePlan.id, 
+      workoutDaysWithSessions,
+      inputDate
+    );
 
     return {
       activeWorkoutPlanId: activePlan.id,
@@ -164,11 +173,7 @@ class GetHomeDataUseCase {
 
 const getHomeDataUseCase = new GetHomeDataUseCase(
   workoutPlansRepository,
-  userWorkoutSessionsRepository,
   workoutSessionsRepository,
 );
 
 export { GetHomeDataUseCase, getHomeDataUseCase };
-
-
-

@@ -20,7 +20,7 @@ export const userWorkoutSessions = pgTable(
     workoutDayId: text('workout_day_id')
       .notNull()
       .references(() => workoutDays.id, { onDelete: 'cascade' }),
-    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    startedAt: timestamp('started_at', { withTimezone: true }),
     completedAt: timestamp('completed_at', { withTimezone: true }),
   },
   (t) => [

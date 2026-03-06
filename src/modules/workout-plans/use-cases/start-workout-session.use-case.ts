@@ -4,13 +4,10 @@ import {
   WorkoutPlanNotActiveError,
 } from '@/shared/errors/workout-session.error';
 import {
-  type UserWorkoutSessionsRepository,
-  userWorkoutSessionsRepository,
-} from '../repository/user-workout-sessions.repository';
-import {
   type WorkoutPlansRepository,
   workoutPlansRepository,
 } from '../repository/workout-plans.repository';
+import { workoutSessionsRepository, WorkoutSessionsRepository } from '@/modules/workout-sessions/repositories/workout-sessions.repository';
 
 interface StartWorkoutSessionInput {
   workoutPlanId: string;
@@ -21,7 +18,7 @@ interface StartWorkoutSessionInput {
 class StartWorkoutSessionUseCase {
   constructor(
     private readonly workoutPlansRepository: WorkoutPlansRepository,
-    private readonly userWorkoutSessionsRepository: UserWorkoutSessionsRepository,
+    private readonly workoutSessionsRepository: WorkoutSessionsRepository,
   ) {}
 
   async execute(input: StartWorkoutSessionInput) {
@@ -41,7 +38,7 @@ class StartWorkoutSessionUseCase {
       throw new NotFoundError('Dia de treino');
     }
 
-    const existingSession = await this.userWorkoutSessionsRepository.findByDayIdAndDate(
+    const existingSession = await this.workoutSessionsRepository.findByDayIdAndDate(
       input.workoutDayId,
       new Date(),
     );
@@ -50,9 +47,10 @@ class StartWorkoutSessionUseCase {
       throw new SessionAlreadyExistsError();
     }
 
-    const session = await this.userWorkoutSessionsRepository.create({
+    const session = await this.workoutSessionsRepository.create({
       userId: input.userId,
       workoutDayId: input.workoutDayId,
+      workoutPlanId: input.workoutPlanId,
     });
 
     return session;
@@ -61,7 +59,7 @@ class StartWorkoutSessionUseCase {
 
 const startWorkoutSessionUseCase = new StartWorkoutSessionUseCase(
   workoutPlansRepository,
-  userWorkoutSessionsRepository,
+  workoutSessionsRepository,
 );
 
 export { StartWorkoutSessionUseCase, startWorkoutSessionUseCase };

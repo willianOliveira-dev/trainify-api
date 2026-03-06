@@ -12,6 +12,6 @@ export const UpdateWorkoutSessionBodySchema = z.object({
 
 export const UpdateWorkoutSessionResponseSchema = z.object({
   id: z.string().uuid(),
-  startedAt: z.date(),
+  startedAt: z.date().nullable(),
   completedAt: z.date().nullable(),
 });

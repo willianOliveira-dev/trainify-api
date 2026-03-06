@@ -1,12 +1,9 @@
 import { NotFoundError } from '@/shared/errors/app.error';
 import {
-  type UserWorkoutSessionsRepository,
-  userWorkoutSessionsRepository,
-} from '../repository/user-workout-sessions.repository';
-import {
   type WorkoutPlansRepository,
   workoutPlansRepository,
 } from '../repository/workout-plans.repository';
+import { workoutSessionsRepository, WorkoutSessionsRepository } from '@/modules/workout-sessions/repositories/workout-sessions.repository';
 
 interface UpdateWorkoutSessionInput {
   workoutPlanId: string;
@@ -19,7 +16,7 @@ interface UpdateWorkoutSessionInput {
 class UpdateWorkoutSessionUseCase {
   constructor(
     private readonly workoutPlansRepository: WorkoutPlansRepository,
-    private readonly userWorkoutSessionsRepository: UserWorkoutSessionsRepository,
+    private readonly userWorkoutSessionsRepository: WorkoutSessionsRepository,
   ) {}
 
   async execute(input: UpdateWorkoutSessionInput) {
@@ -51,7 +48,7 @@ class UpdateWorkoutSessionUseCase {
 
 const updateWorkoutSessionUseCase = new UpdateWorkoutSessionUseCase(
   workoutPlansRepository,
-  userWorkoutSessionsRepository,
+  workoutSessionsRepository,
 );
 
 export { UpdateWorkoutSessionUseCase, updateWorkoutSessionUseCase };

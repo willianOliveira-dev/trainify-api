@@ -10,6 +10,7 @@ import type {
   WorkoutPlanRepositoryDbOutput,
   WorkoutPlansListRepositoryDbOutput,
 } from '@/modules/workout-plans/repository/workout-plans.repository.types';
+import { workoutSessionsRepository } from '@/modules/workout-sessions/repositories/workout-sessions.repository';
 
 class WorkoutPlansRepository {
   async create(data: CreateWorkoutPlanRepositoryInput): Promise<WorkoutPlanRepositoryDbOutput> {
@@ -127,52 +128,45 @@ class WorkoutPlansRepository {
     planId: string,
     dayId: string,
   ): Promise<WorkoutDayDetailsRepositoryDbOutput | null> {
-    const result = await db.query.workoutDays.findFirst({
-      where: (table, { and, eq }) => and(eq(table.id, dayId), eq(table.workoutPlanId, planId)),
-      with: {
-        workoutPlan: {
-          columns: {
-            userId: true,
-          },
-        },
-        exercises: {
-          columns: {
-            createdAt: false,
-            updatedAt: false,
-          },
-        },
-        sessions: {
-          where: (sessionTable, { eq }) => eq(sessionTable.workoutDayId, dayId),
-          columns: {
-            id: true,
-            workoutDayId: true,
-            startedAt: true,
-            completedAt: true,
-          },
-        },
+    const workoutDayData = await db.query.workoutDays.findFirst({
+    where: (table, { and, eq }) =>
+      and(eq(table.id, dayId), eq(table.workoutPlanId, planId)),
+    with: {
+      workoutPlan: true,
+      exercises: {
+        orderBy: (exercises, { asc }) => [asc(exercises.order)],
       },
-    });
+    },
+  });
 
-    if (!result) {
-      return null;
-    }
+    if (!workoutDayData) return null;
+    
+  const todaySessions = await workoutSessionsRepository.findTodaySessionsByWorkoutDayId(dayId);
 
-    return {
-      id: result.id,
-      name: result.name,
-      isRest: result.isRest,
-      coverImageUrl: result.coverImageUrl ?? undefined,
-      estimatedDurationInSeconds: result.estimatedDurationInSeconds ?? 0,
-      weekDay: result.weekDay as any,
-      workoutPlanUserId: result.workoutPlan.userId,
-      exercises: result.exercises,
-      sessions: result.sessions.map((session) => ({
-        id: session.id,
-        workoutDayId: session.workoutDayId,
-        startedAt: session.startedAt?.toISOString(),
-        completedAt: session.completedAt?.toISOString(),
-      })),
-    };
+  return {
+    id: workoutDayData.id,
+    name: workoutDayData.name,
+    isRest: workoutDayData.isRest,
+    coverImageUrl: workoutDayData.coverImageUrl,
+    estimatedDurationInSeconds: workoutDayData.estimatedDurationInSeconds ?? 0,
+    workoutPlanUserId: workoutDayData.workoutPlan.userId,
+    weekDay: workoutDayData.weekDay,
+    exercises: workoutDayData.exercises.map(exercise => ({
+      id: exercise.id,
+      order: exercise.order,
+      name: exercise.name,
+      sets: exercise.sets,
+      reps: exercise.reps,
+      restTimeInSeconds: exercise.restTimeInSeconds,
+      workoutDayId: exercise.workoutDayId,  
+    })),
+    sessions: todaySessions.map(session => ({
+      id: session.id,
+      workoutDayId: session.workoutDayId,
+      startedAt: session.startedAt,
+      completedAt: session.completedAt,
+    })),
+  };
   }
 
   async findAll(): Promise<WorkoutPlansListRepositoryDbOutput> {

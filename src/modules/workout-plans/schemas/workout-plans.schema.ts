@@ -83,7 +83,7 @@ export const GetWorkoutDayResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
   isRest: z.boolean(),
-  coverImageUrl: z.string().optional(),
+  coverImageUrl: z.string().nullable(),
   estimatedDurationInSeconds: z.number(),
   weekDay: z.enum(weekDayEnum.enumValues),
   exercises: z.array(
@@ -101,8 +101,8 @@ export const GetWorkoutDayResponseSchema = z.object({
     z.object({
       id: z.string(),
       workoutDayId: z.string(),
-      startedAt: z.string().optional(),
-      completedAt: z.string().optional(),
+      startedAt: z.date().nullable(),
+      completedAt: z.date().nullable(),
     }),
   ),
 });
