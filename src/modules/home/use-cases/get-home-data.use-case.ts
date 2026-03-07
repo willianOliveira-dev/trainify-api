@@ -19,14 +19,6 @@ interface GetHomeDataInput {
   userId: string;
 }
 
-type WorkoutDayWithSessions = {
-  weekDay: string;
-  isRest: boolean;
-  sessions: {
-    startedAt: Date | null;
-    completedAt: Date | null;
-  }[];
-};
 
 class GetHomeDataUseCase {
   constructor(
@@ -36,7 +28,7 @@ class GetHomeDataUseCase {
   
   private async calculateStreak(
     workoutPlanId: string,
-    workoutDays: WorkoutDayWithSessions[], 
+    workoutDays: Array<{ weekDay: string; isRest: boolean }>,
     currentDate: dayjs.Dayjs,
   ): Promise<number> {
     const planWeekDays = new Set(workoutDays.map((d) => d.weekDay));
@@ -48,34 +40,33 @@ class GetHomeDataUseCase {
 
     const completedDates = new Set(
       allSessions
-        .filter(s => s.startedAt !== null) 
-        .map((s) => dayjs.utc(s.startedAt!).format("YYYY-MM-DD")),
+        .filter(s => s.completedAt !== null)
+        .map((s) => dayjs.utc(s.startedAt).format('YYYY-MM-DD')),
     );
 
     let streak = 0;
-    let day = currentDate.startOf('day'); 
+    let day = currentDate.startOf('day');
 
     for (let i = 0; i < 365; i++) {
       const weekDay = WEEKDAY_MAP[day.day()];
 
       if (!planWeekDays.has(weekDay)) {
-        day = day.subtract(1, "day");
+        day = day.subtract(1, 'day');
         continue;
       }
 
       if (restWeekDays.has(weekDay)) {
-        streak++;
-        day = day.subtract(1, "day");
+        day = day.subtract(1, 'day');
         continue;
       }
 
-      const dateKey = day.format("YYYY-MM-DD");
+      const dateKey = day.format('YYYY-MM-DD');
       if (completedDates.has(dateKey)) {
         streak++;
-        day = day.subtract(1, "day");
+        day = day.subtract(1, 'day');
         continue;
       }
-      
+
       break;
     }
 
@@ -148,18 +139,14 @@ class GetHomeDataUseCase {
       exercisesCount: todayWorkoutDay.exercises.length,
     } : null;
 
-    const workoutDaysWithSessions = activePlan.workoutDays.map((day) => ({
+    const workoutDaysSimplified = activePlan.workoutDays.map((day) => ({
       weekDay: day.weekDay,
       isRest: day.isRest,
-      sessions: day.sessions.map((session) => ({
-        startedAt: session.startedAt, 
-        completedAt: session.completedAt,
-      })),
     }));
 
     const workoutStreak = await this.calculateStreak(
-      activePlan.id, 
-      workoutDaysWithSessions,
+      activePlan.id,
+      workoutDaysSimplified,
       inputDate
     );
 

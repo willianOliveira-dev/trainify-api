@@ -85,18 +85,18 @@ class WorkoutSessionsRepository {
     return sessions;
   }
 
-  async findCompletedSessionsByWorkoutPlanId(workoutPlanId: string): Promise<{ startedAt: Date | null }[]> {
+  async findCompletedSessionsByWorkoutPlanId(workoutPlanId: string): Promise<{ startedAt: Date | null; completedAt: Date | null }[]> {
     const sessions = await db.query.userWorkoutSessions.findMany({
       where: (table, { and, eq, isNotNull }) =>
         and(eq(table.workoutPlanId, workoutPlanId), isNotNull(table.completedAt)),
       columns: {
         startedAt: true,
+        completedAt: true,
       },
     });
 
-    return sessions;
-  }
-
+  return sessions;
+}
 
   async findSessionsByWorkoutDayIdAndDate(
     workoutDayId: string, 

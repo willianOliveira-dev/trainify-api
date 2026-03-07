@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { GetStatsResponseDto } from '../dto/stats.dto';
-import {
-  statsRepository as defaultStatsRepository,
-  type StatsRepository,
-} from '../repository/stats.repository';
+import { workoutSessionsRepository, WorkoutSessionsRepository } from '@/modules/workout-sessions/repositories/workout-sessions.repository';
+import { workoutPlansRepository, WorkoutPlansRepository } from '@/modules/workout-plans/repository/workout-plans.repository';
+import { WEEKDAY_MAP } from '@/modules/home/constants/week-day-map.constant'; 
 
 dayjs.extend(utc);
 
@@ -15,15 +14,64 @@ interface GetStatsInput {
 }
 
 class GetStatsUseCase {
-  constructor(private readonly statsRepository: StatsRepository) {}
+  constructor(
+    private readonly workoutSessionsRepository: WorkoutSessionsRepository,
+    private readonly workoutPlansRepository: WorkoutPlansRepository,
+  ) {}
+
+  private async calculateStreak(
+    workoutPlanId: string,
+    workoutDays: Array<{ weekDay: string; isRest: boolean }>,
+    currentDate: dayjs.Dayjs,
+  ): Promise<number> {
+    const planWeekDays = new Set(workoutDays.map((d) => d.weekDay));
+    const restWeekDays = new Set(
+      workoutDays.filter((d) => d.isRest).map((d) => d.weekDay),
+    );
+
+    const allSessions = await this.workoutSessionsRepository.findCompletedSessionsByWorkoutPlanId(workoutPlanId);
+
+    const completedDates = new Set(
+      allSessions
+        .filter(s => s.completedAt !== null)
+        .map((s) => dayjs.utc(s.startedAt).format('YYYY-MM-DD')),
+    );
+
+    let streak = 0;
+    let day = currentDate.startOf('day');
+
+    for (let i = 0; i < 365; i++) {
+      const weekDay = WEEKDAY_MAP[day.day()];
+
+      if (!planWeekDays.has(weekDay)) {
+        day = day.subtract(1, 'day');
+        continue;
+      }
+
+      if (restWeekDays.has(weekDay)) {
+        day = day.subtract(1, 'day');
+        continue;
+      }
+
+      const dateKey = day.format('YYYY-MM-DD');
+      if (completedDates.has(dateKey)) {
+        streak++;
+        day = day.subtract(1, 'day');
+        continue;
+      }
+
+      break;
+    }
+
+    return streak;
+  }
 
   async execute({ from, to, userId }: GetStatsInput): Promise<GetStatsResponseDto> {
     const fromDate = dayjs.utc(from).startOf('day').toDate();
     const toDate = dayjs.utc(to).endOf('day').toDate();
 
-    const sessions = await this.statsRepository.findSessionsByDateRange(userId, fromDate, toDate);
+    const sessions = await this.workoutSessionsRepository.findSessionsByDateRange(userId, fromDate, toDate);
 
-    // ── 1. Consistency map (only days with activity) ──────────────────────────
     const consistencyByDay: Record<
       string,
       { workoutDayCompleted: boolean; workoutDayStarted: boolean }
@@ -46,12 +94,10 @@ class GetStatsUseCase {
       }
     }
 
-    // ── 2. Completed & total counts ───────────────────────────────────────────
     const completedWorkoutsCount = sessions.filter((s) => s.completedAt !== null).length;
     const totalSessions = sessions.length;
     const conclusionRate = totalSessions > 0 ? completedWorkoutsCount / totalSessions : 0;
 
-    // ── 3. Total time in seconds (only for completed sessions) ────────────────
     const totalTimeInSeconds = sessions.reduce((acc, session) => {
       if (!session.completedAt) {
         return acc;
@@ -59,25 +105,22 @@ class GetStatsUseCase {
       return acc + dayjs(session.completedAt).diff(dayjs(session.startedAt), 'second');
     }, 0);
 
-    // ── 4. Streak: consecutive days backwards from `to` with at least 1 completed session ──
-    const completesDays = new Set(
-      sessions
-        .filter((s) => s.completedAt !== null)
-        .map((s) => dayjs.utc(s.startedAt).format('YYYY-MM-DD')),
-    );
+    const activePlan = await this.workoutPlansRepository.findActiveByUserId(userId);
 
     let workoutStreak = 0;
-    let cursor = dayjs.utc(to);
-    const fromDayJs = dayjs.utc(from);
 
-    while (cursor.isSame(fromDayJs, 'day') || cursor.isAfter(fromDayJs, 'day')) {
-      const key = cursor.format('YYYY-MM-DD');
-      if (completesDays.has(key)) {
-        workoutStreak++;
-        cursor = cursor.subtract(1, 'day');
-      } else {
-        break;
-      }
+    if (activePlan) {
+      const workoutDaysSimplified = activePlan.workoutDays.map((day) => ({
+        weekDay: day.weekDay,
+        isRest: day.isRest,
+      }));
+
+      const toDayjs = dayjs.utc(to);
+      workoutStreak = await this.calculateStreak(
+        activePlan.id,
+        workoutDaysSimplified,
+        toDayjs
+      );
     }
 
     return {
@@ -90,6 +133,6 @@ class GetStatsUseCase {
   }
 }
 
-const getStatsUseCase = new GetStatsUseCase(defaultStatsRepository);
+const getStatsUseCase = new GetStatsUseCase(workoutSessionsRepository, workoutPlansRepository);
 
 export { GetStatsUseCase, getStatsUseCase };
