@@ -3,6 +3,7 @@ import {
   usersRepository as defaultUsersRepository,
   type UsersRepository,
 } from '../repository/users.repository';
+import { NotFoundError } from '@/shared/errors/app.error';
 
 interface UpsertUserTrainDataInput extends UpsertUserTrainDataDto {
   userId: string;
@@ -13,7 +14,14 @@ class UpsertUserTrainDataUseCase {
 
   async execute(input: UpsertUserTrainDataInput): Promise<GetUserTrainDataResponseDto> {
     const { userId, ...data } = input;
-    return this.usersRepository.upsert(userId, data);
+
+    const result = await this.usersRepository.upsert(userId, data);
+
+    if (!result) {
+      throw new NotFoundError('Usuário');
+    }
+
+    return result;
   }
 }
 

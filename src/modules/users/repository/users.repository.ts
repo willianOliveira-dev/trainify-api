@@ -1,67 +1,68 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@/db/connection';
-import { user, userTrainData } from '@/db/schemas';
+import { user as userSchema, userTrainData } from '@/db/schemas';
 import type { GetUserTrainDataResponseDto, UpsertUserTrainDataDto } from '../dto/users.dto';
 
 class UsersRepository {
-  async upsert(userId: string, data: UpsertUserTrainDataDto): Promise<GetUserTrainDataResponseDto> {
-    await db
-      .insert(userTrainData)
-      .values({
-        userId,
-        weightInGrams: data.weightInGrams,
-        heightInCentimeters: data.heightInCentimeters,
-        age: data.age,
-        bodyFatPercentage: data.bodyFatPercentage,
-      })
-      .onConflictDoUpdate({
-        target: userTrainData.userId,
-        set: {
-          weightInGrams: data.weightInGrams,
-          heightInCentimeters: data.heightInCentimeters,
-          age: data.age,
-          bodyFatPercentage: data.bodyFatPercentage,
-          updatedAt: new Date(),
-        },
-      });
+ async upsert(userId: string, data: UpsertUserTrainDataDto): Promise<GetUserTrainDataResponseDto> {
 
-    const result = await db
-      .select({
-        userId: userTrainData.userId,
-        userName: user.name,
-        weightInGrams: userTrainData.weightInGrams,
-        heightInCentimeters: userTrainData.heightInCentimeters,
-        age: userTrainData.age,
-        bodyFatPercentage: userTrainData.bodyFatPercentage,
-      })
-      .from(userTrainData)
-      .innerJoin(user, eq(user.id, userTrainData.userId))
-      .where(eq(userTrainData.userId, userId))
-      .limit(1);
+  await db.insert(userTrainData)
+    .values({ userId, ...data })
+    .onConflictDoUpdate({
+      target: userTrainData.userId,
+      set: { ...data, updatedAt: new Date() },
+    });
 
-    const row = result[0];
-    if (!row) {
-      throw new Error('Falha ao salvar os dados de treino');
-    }
-    return row;
+  const [result, user] = await Promise.all([
+    db.query.userTrainData.findFirst({
+      where: eq(userTrainData.userId, userId),
+    }),
+    db.query.user.findFirst({
+      where: eq(userSchema.id, userId),
+      columns: { name: true },
+    }),
+  ]);
+
+  if (!result || !user) {
+    return null;
   }
+  
+
+  return {
+    userId: result.userId,
+    userName: user.name,
+    weightInGrams: result.weightInGrams,
+    heightInCentimeters: result.heightInCentimeters,
+    age: result.age,
+    bodyFatPercentage: result.bodyFatPercentage,
+  };
+}
+
 
   async findByUserId(userId: string): Promise<GetUserTrainDataResponseDto> {
-    const result = await db
-      .select({
-        userId: userTrainData.userId,
-        userName: user.name,
-        weightInGrams: userTrainData.weightInGrams,
-        heightInCentimeters: userTrainData.heightInCentimeters,
-        age: userTrainData.age,
-        bodyFatPercentage: userTrainData.bodyFatPercentage,
-      })
-      .from(userTrainData)
-      .innerJoin(user, eq(user.id, userTrainData.userId))
-      .where(eq(userTrainData.userId, userId))
-      .limit(1);
 
-    return result[0] ?? null;
+    const [result, user] = await Promise.all([
+      db.query.userTrainData.findFirst({
+        where: eq(userTrainData.userId, userId),
+      }),
+      db.query.user.findFirst({
+        where: eq(userSchema.id, userId),
+        columns: { name: true }
+      })
+    ]);
+
+    if (!user || !result) {
+      return null;
+    }
+
+    return {
+      userId: userId,
+      userName: user.name,
+      weightInGrams: result.weightInGrams,
+      heightInCentimeters: result.heightInCentimeters,
+      age: result.age,
+      bodyFatPercentage: result.bodyFatPercentage,
+    };
   }
 }
 

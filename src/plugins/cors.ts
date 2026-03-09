@@ -6,10 +6,12 @@ export default fp<FastifyCorsOptions>(
   async (app) => {
     app.register(cors, {
       origin: env.nodeEnv !== 'production' ? true : env.allowedOrigins,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Request-ID'],
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders:       ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Request-ID', 'user-agent'],
       credentials: true,
       maxAge: 600,
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
     });
   },
   {

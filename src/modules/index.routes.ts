@@ -16,5 +16,5 @@ export async function registerAppRouter(app: FastifyInstance): Promise<void> {
   await app.register(home, { prefix: '/trainify/api/v1' });
   await app.register(statsRoutes, { prefix: '/trainify/api/v1' });
   await app.register(usersRoutes, { prefix: '/trainify/api/v1' });
-  await app.register(iaRoutes, { prefix: '/trainify/api/v1/ia' });
+  await app.register(iaRoutes, { prefix: '/trainify/api/v1' });
 }

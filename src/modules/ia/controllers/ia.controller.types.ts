@@ -1,12 +1,10 @@
 /** biome-ignore-all lint/style/useNamingConvention: <explanation> */
 import type { RouteHandler } from 'fastify';
 import type { z } from 'zod';
-import type { ChatBodySchema, ChatResponseSchema } from '../schemas/ia.schema';
+import type { ChatBodySchema } from '../schemas/ia.schema';
 
 export type ChatRequestBody = z.infer<typeof ChatBodySchema>;
-export type ChatResponse = z.infer<typeof ChatResponseSchema>;
 
 export type ChatHandler = RouteHandler<{
   Body: ChatRequestBody;
-  Reply: ChatResponse;
 }>;

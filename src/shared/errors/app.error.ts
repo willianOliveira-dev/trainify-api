@@ -34,3 +34,10 @@ export class ForbiddenError extends AppError {
     super(m, 403, 'FORBIDDEN');
   }
 }
+
+export class InternalServerError extends AppError {
+  constructor(m = 'Erro interno do servidor') {
+    super(m, 500, 'INTERNAL_SERVER_ERROR');
+  }
+}
+

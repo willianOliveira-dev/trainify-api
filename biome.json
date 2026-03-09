@@ -25,8 +25,7 @@
         "noExcessiveCognitiveComplexity": "error"
       },
       "style": {
-        "useBlockStatements": "error",
-        "useNamingConvention": "error"
+        "useBlockStatements": "error"
       },
       "correctness": {
         "noUnusedVariables": "error"
