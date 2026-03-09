@@ -9,8 +9,8 @@ const ChatBodySchema = z.object({
             parts: z.array(
                 z.object({
                     type: z.string(),
-                    text: z.string(),
-                }),
+                    text: z.string().optional(),
+                }).passthrough()
             ),
         }),
     ),

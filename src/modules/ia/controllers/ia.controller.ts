@@ -20,7 +20,6 @@ class IaController {
         const session = request.session;
 
         const tools = buildAiTools(session.user.id);
-
         const modelMessages = convertUiToModelMessages(messages);
 
         const result = streamText({

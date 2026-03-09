@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/style/useNamingConvention: <explanation> */
-
 import type { RouteHandler } from 'fastify';
 import type { z } from 'zod';
 import type {
