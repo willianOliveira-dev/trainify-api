@@ -39,7 +39,7 @@ export const workoutDays = pgTable(
     index('workout_days_plan_rest_idx').on(t.workoutPlanId, t.isRest),
     check(
       'workout_days_duration_positive_chk',
-      sql`${t.estimatedDurationInSeconds} IS NULL OR ${t.estimatedDurationInSeconds} > 0`,
+      sql`${t.estimatedDurationInSeconds} IS NULL OR ${t.estimatedDurationInSeconds} >= 0`,
     ),
   ],
 );

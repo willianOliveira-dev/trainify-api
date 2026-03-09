@@ -27,8 +27,8 @@ class IaController {
             system: SYSTEM_PROMPT,
             messages: modelMessages,
             maxRetries: 3,
-            maxOutputTokens: 500,
-            stopWhen: stepCountIs(5),
+            maxOutputTokens: 16000,
+            stopWhen: stepCountIs(10),
             tools,
         });
 

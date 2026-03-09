@@ -33,6 +33,7 @@ class WorkoutPlansRepository {
                 name: day.name,
                 weekDay: day.weekDay,
                 isRest: day.isRest,
+                coverImageUrl: day.coverImageUrl ?? null,
                 estimatedDurationInSeconds: day.estimatedDurationInSeconds,
                 workoutPlanId: plan.id,
             }));
@@ -252,6 +253,7 @@ class WorkoutPlansRepository {
                 name: day.name,
                 weekDay: day.weekDay,
                 isRest: day.isRest,
+                coverImageUrl: day.coverImageUrl ?? null,
                 estimatedDurationInSeconds: day.estimatedDurationInSeconds,
                 workoutPlanId: id,
             }));
@@ -319,9 +321,12 @@ class WorkoutPlansRepository {
             .where(eq(workoutPlans.id, id));
     }
 
-    async existsWorkoutPlanActive(): Promise<{ id: string } | null> {
+    async existsWorkoutPlanActive(
+        userId: string,
+    ): Promise<{ id: string } | null> {
         const result = await db.query.workoutPlans.findFirst({
-            where: (table, { eq }) => eq(table.isActive, true),
+            where: (table, { and, eq }) =>
+                and(eq(table.isActive, true), eq(table.userId, userId)),
             columns: {
                 id: true,
             },

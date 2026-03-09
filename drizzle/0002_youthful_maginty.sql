@@ -1,0 +1,2 @@
+ALTER TABLE "workout_days" DROP CONSTRAINT "workout_days_duration_positive_chk";--> statement-breakpoint
+ALTER TABLE "workout_days" ADD CONSTRAINT "workout_days_duration_positive_chk" CHECK ("workout_days"."estimated_duration_in_seconds" IS NULL OR "workout_days"."estimated_duration_in_seconds" >= 0);
