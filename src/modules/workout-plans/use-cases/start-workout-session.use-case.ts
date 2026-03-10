@@ -6,11 +6,22 @@ import { NotFoundError } from '@/shared/errors/app.error';
 import {
     SessionAlreadyExistsError,
     WorkoutPlanNotActiveError,
+    WrongWeekDayError,
 } from '@/shared/errors/workout-session.error';
 import {
     type WorkoutPlansRepository,
     workoutPlansRepository,
 } from '../repository/workout-plans.repository';
+
+const WEEK_DAY_INDEX: Record<string, number> = {
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+};
 
 interface StartWorkoutSessionInput {
     workoutPlanId: string;
@@ -43,6 +54,10 @@ class StartWorkoutSessionUseCase {
 
         if (!workoutDay) {
             throw new NotFoundError('Dia de treino');
+        }
+
+        if (WEEK_DAY_INDEX[workoutDay.weekDay] !== new Date().getDay()) {
+            throw new WrongWeekDayError();
         }
 
         const existingSession =

@@ -9,9 +9,6 @@ export const auth = betterAuth({
     baseURL: env.betterAuthUrl,
     secret: env.betterAuthSecret,
     trustedOrigins: env.allowedOrigins,
-    emailAndPassword: {
-        enabled: true,
-    },
     socialProviders: {
         google: {
             clientId: env.googleClientId,

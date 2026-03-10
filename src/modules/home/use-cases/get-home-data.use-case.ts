@@ -46,7 +46,7 @@ class GetHomeDataUseCase {
         const completedDates = new Set(
             allSessions
                 .filter((s) => s.completedAt !== null)
-                .map((s) => dayjs.utc(s.startedAt).format('YYYY-MM-DD')),
+                .map((s) => dayjs.utc(s.completedAt).format('YYYY-MM-DD')),
         );
 
         let streak = 0;
@@ -114,14 +114,12 @@ class GetHomeDataUseCase {
             const formattedDate = currentDate.format('YYYY-MM-DD');
 
             const sessionsForCurrentDate = sessionsInWeek.filter((session) => {
-                if (!session.startedAt) {
+                const dateToCheck = session.completedAt ?? session.startedAt;
+                if (!dateToCheck) {
                     return false;
                 }
-
-                const sessionDate = dayjs(session.startedAt).utc();
-                const isSameDay = sessionDate.isSame(currentDate, 'day');
-
-                return isSameDay;
+                const sessionDate = dayjs.utc(dateToCheck);
+                return sessionDate.isSame(currentDate, 'day');
             });
 
             const started = sessionsForCurrentDate.length > 0;

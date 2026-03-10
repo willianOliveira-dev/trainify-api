@@ -42,14 +42,11 @@ class CompleteSetUseCase {
                 input.sessionId,
             );
 
-        if (completedCount >= input.totalSetsInWorkout) {
-            await this.workoutSessionsRepository.update(input.sessionId, {
-                completedAt: new Date(),
-            });
-            return { set, autoCompleted: true };
-        }
-
-        return { set, autoCompleted: false };
+        return {
+            set,
+            autoCompleted: false,
+            completedCount,
+        };
     }
 }
 
