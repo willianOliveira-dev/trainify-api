@@ -1,12 +1,14 @@
 import { createWorkoutPlanUseCase } from '@/modules/workout-plans/use-cases/create-workout-plan.use-case';
 import { completeSetUseCase } from '../use-cases/complete-set.use-case';
 import { getAllWorkoutPlanUseCase } from '../use-cases/get-all-workout-plans.use-case';
+import { getSessionSetsUseCase } from '../use-cases/get-session-sets.use-case';
 import { getWorkoutDayDetailsUseCase } from '../use-cases/get-workout-day-details.use-case';
 import { getWorkoutPlanDetailsUseCase } from '../use-cases/get-workout-plan-details.use-case';
 import { startWorkoutSessionUseCase } from '../use-cases/start-workout-session.use-case';
 import { undoSetUseCase } from '../use-cases/undo-set.use-case';
 import { updateWorkoutSessionUseCase } from '../use-cases/update-workout-session.use-case';
 import type { CompleteSetHandler } from './complete-set.controller.types';
+import type { GetSessionSetsHandler } from './get-session-sets.controller.types';
 import type { StartWorkoutSessionHandler } from './start-workout-session.controller.types';
 import type { UndoSetHandler } from './undo-set.controller.types';
 import type { UpdateWorkoutSessionHandler } from './update-workout-session.controller.types';
@@ -46,6 +48,14 @@ class WorkoutPlansController {
         });
 
         return reply.status(201).send(session);
+    };
+
+    getSessionSets: GetSessionSetsHandler = async (request, reply) => {
+        const { sessionId } = request.params;
+        const userId = request.session.user.id;
+
+        const sets = await getSessionSetsUseCase.execute({ sessionId, userId });
+        return reply.status(200).send(sets);
     };
 
     completeSet: CompleteSetHandler = async (request, reply) => {

@@ -1,4 +1,5 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import z from 'zod';
 import { ErrorResponseSchema } from '@/shared/errors/schemas/error.schema';
 import {
     privateMutationResponse,
@@ -6,9 +7,19 @@ import {
 } from '@/shared/http/schemas/response.schema';
 import { workoutPlansController } from '../controllers/workout-plans.controller';
 import {
+    CompleteSetBodySchema,
+    CompleteSetParamsSchema,
+    CompleteSetResponseSchema,
+} from '../dto/complete-set.dto';
+import {
+    GetSessionSetsParamsSchema,
+    GetSessionSetsResponseSchema,
+} from '../dto/get-session-sets.dto';
+import {
     WorkoutPlanSessionParamsSchema,
     WorkoutSessionResponseSchema,
 } from '../dto/start-session.dto';
+import { UndoSetBodySchema, UndoSetParamsSchema } from '../dto/undo-set.dto';
 import {
     UpdateWorkoutSessionBodySchema,
     UpdateWorkoutSessionParamsSchema,
@@ -23,9 +34,6 @@ import {
     WorkoutPlanResponseSchema,
     WorkoutPlansListResponseSchema,
 } from '../schemas/workout-plans.schema';
-import { CompleteSetBodySchema, CompleteSetParamsSchema, CompleteSetResponseSchema } from '../dto/complete-set.dto';
-import { UndoSetBodySchema, UndoSetParamsSchema } from '../dto/undo-set.dto';
-import z from 'zod';
 
 const workoutPlans: FastifyPluginAsyncZod = async (app) => {
     app.addHook('onRequest', app.authenticate);
@@ -138,6 +146,22 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
         handler: workoutPlansController.findDayDetails,
     });
 
+    app.get('/workout-plans/:id/days/:dayId/sessions/:sessionId/sets', {
+        schema: {
+            operationId: 'getSessionSets',
+            tags: ['Workout Plans'],
+            summary: 'Retorna as séries concluídas de uma sessão',
+            params: GetSessionSetsParamsSchema,
+            response: privateResponse({
+                200: GetSessionSetsResponseSchema.describe(
+                    'Séries retornadas com sucesso',
+                ),
+                404: ErrorResponseSchema.describe('Sessão não encontrada'),
+            }),
+        },
+        handler: workoutPlansController.getSessionSets,
+    });
+
     app.post(
         '/workout-plans/:id/days/:dayId/sessions/:sessionId/exercises/:exerciseId/sets',
         {
@@ -167,7 +191,7 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
                 operationId: 'undoSet',
                 tags: ['Workout Plans'],
                 summary: 'Desmarca uma série concluída',
-                params: UndoSetParamsSchema ,
+                params: UndoSetParamsSchema,
                 body: UndoSetBodySchema,
                 response: privateMutationResponse({
                     204: z.void().describe('Série desmarcada com sucesso'),
