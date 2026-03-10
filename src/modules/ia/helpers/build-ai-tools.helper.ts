@@ -72,6 +72,21 @@ function buildAiTools(userId: string) {
                                 .describe(
                                     'Duração estimada do treino em segundos',
                                 ),
+                            coverCategory: z
+                                .enum([
+                                    'chest',
+                                    'back',
+                                    'legs',
+                                    'shoulders',
+                                    'arms',
+                                    'core',
+                                    'fullbody',
+                                    'cardio',
+                                    'rest',
+                                ])
+                                .describe(
+                                    'Categoria visual do dia de treino. Escolha com base no foco principal dos exercícios. Use "rest" para dias de descanso.',
+                                ),
                             exercises: z
                                 .array(
                                     z.object({

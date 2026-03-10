@@ -4,6 +4,7 @@ import corsPlugin from './cors';
 import errorHandlerPlugin from './error-handler';
 import helmetPlugin from './helmet';
 import multipartPlugin from './multipart';
+import staticPlugin from './static';
 import rateLimitPlugin from './rate-limit';
 import swaggerPlugin from './swagger';
 
@@ -15,6 +16,8 @@ export async function registerPlugins(app: FastifyInstance) {
   await app.register(errorHandlerPlugin);
   await app.register(authPlugin);
   await app.register(multipartPlugin);
-
+  
   await app.register(swaggerPlugin);
+  await app.register(staticPlugin);
+
 }

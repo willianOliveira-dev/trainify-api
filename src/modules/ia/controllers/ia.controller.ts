@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import { stepCountIs, streamText, type UIMessage } from 'ai';
+import { APICallError, stepCountIs, streamText, type UIMessage } from 'ai';
 import type { ChatHandler } from '@/modules/ia/controllers/ia.controller.types';
 import { buildAiTools } from '@/modules/ia/helpers/build-ai-tools.helper';
 import { SYSTEM_PROMPT } from '@/modules/ia/prompts/personal-trainer.prompt';
@@ -23,13 +23,21 @@ class IaController {
         const modelMessages = convertUiToModelMessages(messages);
 
         const result = streamText({
-            model: google('gemini-2.5-flash'),
+            model: google('gemini-2.0-flash'),
             system: SYSTEM_PROMPT,
             messages: modelMessages,
             maxRetries: 3,
             maxOutputTokens: 16000,
             stopWhen: stepCountIs(10),
             tools,
+            onError: (event) => {
+                if (
+                    event.error instanceof APICallError &&
+                    event.error.statusCode === 429
+                ) {
+                    throw event.error;
+                }
+            },
         });
 
         const response = result.toUIMessageStreamResponse();

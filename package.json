@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx --watch --env-file=.env src/server.ts",
-    "build": "tsc",
+    "build": "tsc && cp -r public dist/public",
     "start": "node dist/server.ts",
     "drizzle:seed": "tsx src/db/seed.ts",
     "drizzle:migrate": "npx drizzle-kit generate && npx drizzle-kit migrate",
@@ -28,6 +28,7 @@
     "@fastify/helmet": "^13.0.2",
     "@fastify/multipart": "^9.4.0",
     "@fastify/rate-limit": "^10.3.0",
+    "@fastify/static": "^9.0.0",
     "@fastify/swagger": "^9.7.0",
     "@fastify/swagger-ui": "^5.2.5",
     "@neondatabase/serverless": "^1.0.2",

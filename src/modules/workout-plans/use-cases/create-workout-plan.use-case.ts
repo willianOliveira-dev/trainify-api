@@ -1,5 +1,6 @@
-import { searchYoutubeVideo } from '../helpers/youtube.helper'; 
 import type { CreateWorkoutPlanDto } from '../dto/workout-plans.dto';
+import { resolveCoverImage } from '../helpers/workout-cover.helper';
+import { searchYoutubeVideo } from '../helpers/youtube.helper';
 import {
     type WorkoutPlansRepository,
     workoutPlansRepository,
@@ -12,16 +13,22 @@ class CreateWorkoutPlanUseCase {
         private readonly workoutPlansRepository: WorkoutPlansRepository,
     ) {}
 
-    async execute(dto: CreateWorkoutPlanDto): Promise<CreateWorkoutPlanUseCaseOutput> {
-        const existsPlanActive = await this.workoutPlansRepository.existsWorkoutPlanActive(dto.userId);
+    async execute(
+        dto: CreateWorkoutPlanDto,
+    ): Promise<CreateWorkoutPlanUseCaseOutput> {
+        const existsPlanActive =
+            await this.workoutPlansRepository.existsWorkoutPlanActive(
+                dto.userId,
+            );
 
         const workoutDays = await Promise.all(
             dto.workoutDays.map(async (day) => {
+                console.log('coverCategory recebido:', day.coverCategory);
                 if (day.isRest) {
                     return {
                         ...day,
-                        coverImageUrl: null,
-                        exercises: day.exercises.map((e) => ({ ...e, youtubeVideoId: null })),
+                        coverImageUrl: resolveCoverImage('rest'),
+                        exercises: [],
                     };
                 }
 
@@ -31,32 +38,33 @@ class CreateWorkoutPlanUseCase {
                         return {
                             ...exercise,
                             youtubeVideoId: video?.videoId ?? null,
-                            thumbnailUrl: video?.thumbnailUrl ?? null,
                         };
                     }),
                 );
 
-                const firstThumbnail = exercisesWithVideos[0]?.thumbnailUrl ?? null;
-
                 return {
                     ...day,
-                    coverImageUrl: firstThumbnail,
-                    exercises: exercisesWithVideos.map(({ thumbnailUrl: _, ...e }) => e),
+                    coverImageUrl: resolveCoverImage(
+                        day.coverCategory ?? 'fullbody',
+                    ),
+                    exercises: exercisesWithVideos,
                 };
             }),
         );
 
-        const dtoWithVideos = { ...dto, workoutDays };
+        const workoutPlan = { ...dto, workoutDays };
 
         let rawWorkoutPlan: WorkoutPlanRepositoryDbOutput;
 
         if (existsPlanActive) {
-            rawWorkoutPlan = await this.workoutPlansRepository.deactivatePreviousAndCreateNew(
-                existsPlanActive.id,
-                dtoWithVideos,
-            );
+            rawWorkoutPlan =
+                await this.workoutPlansRepository.deactivatePreviousAndCreateNew(
+                    existsPlanActive.id,
+                    workoutPlan,
+                );
         } else {
-            rawWorkoutPlan = await this.workoutPlansRepository.create(dtoWithVideos);
+            rawWorkoutPlan =
+                await this.workoutPlansRepository.create(workoutPlan);
         }
 
         return {
@@ -86,5 +94,7 @@ class CreateWorkoutPlanUseCase {
     }
 }
 
-const createWorkoutPlanUseCase = new CreateWorkoutPlanUseCase(workoutPlansRepository);
+const createWorkoutPlanUseCase = new CreateWorkoutPlanUseCase(
+    workoutPlansRepository,
+);
 export { CreateWorkoutPlanUseCase, createWorkoutPlanUseCase };
