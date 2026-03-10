@@ -24,8 +24,8 @@ export const WorkoutDaysSchema = z.object({
     .url({ message: 'URL inválida' })
     .optional()
     .or(z.literal('').transform((val) => (val === '' ? null : val))),
-  estimatedDurationInSeconds: z.number({ message: 'Duração deve ser um número' }).min(1, {
-    message: 'Duração deve ser maior que 0',
+  estimatedDurationInSeconds: z.number({ message: 'Duração deve ser um número' }).min(0, {
+    message: 'Duração deve ser maior ou igual 0',
   }),
   workoutPlanId: z.string().nonempty({ message: 'Plano de treino é obrigatório' }),
   createdAt: z.date(),

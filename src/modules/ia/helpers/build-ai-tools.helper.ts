@@ -67,11 +67,6 @@ function buildAiTools(userId: string) {
                             isRest: z
                                 .boolean()
                                 .describe('Se é um dia de descanso ou treino'),
-                            coverImageUrl: z
-                                .string()
-                                .url()
-                                .optional()
-                                .describe('URL da imagem de capa do treino'),
                             estimatedDurationInSeconds: z
                                 .number()
                                 .describe(

@@ -52,6 +52,7 @@ class WorkoutPlansRepository {
                     sets: exercise.sets,
                     reps: exercise.reps,
                     restTimeInSeconds: exercise.restTimeInSeconds,
+                    youtubeVideoId: exercise.youtubeVideoId ?? null,
                     workoutDayId,
                 }));
             });
@@ -176,6 +177,7 @@ class WorkoutPlansRepository {
                 sets: exercise.sets,
                 reps: exercise.reps,
                 restTimeInSeconds: exercise.restTimeInSeconds,
+                youtubeVideoId: exercise.youtubeVideoId,
                 workoutDayId: exercise.workoutDayId,
             })),
             sessions: sessionsForDate.map((session) => ({
@@ -273,6 +275,7 @@ class WorkoutPlansRepository {
                         sets: exercise.sets,
                         reps: exercise.reps,
                         restTimeInSeconds: exercise.restTimeInSeconds,
+                        youtubeVideoId: exercise.youtubeVideoId ?? null,
                         workoutDayId,
                     }));
                 },

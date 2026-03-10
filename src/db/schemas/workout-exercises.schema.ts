@@ -13,6 +13,7 @@ export const workoutExercises = pgTable(
     name: text('name').notNull(),
     sets: integer('sets').notNull(),
     reps: integer('reps').notNull(),
+    youtubeVideoId: text('youtube_video_id'),
     restTimeInSeconds: integer('rest_time_in_seconds').notNull(),
     workoutDayId: text('workout_day_id')
       .notNull()

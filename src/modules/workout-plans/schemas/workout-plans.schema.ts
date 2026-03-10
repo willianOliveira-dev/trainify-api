@@ -93,6 +93,7 @@ export const GetWorkoutDayResponseSchema = z.object({
       sets: z.number(),
       reps: z.number(),
       restTimeInSeconds: z.number(),
+      youtubeVideoId: z.string().nullable(),
       order: z.number(),
       workoutDayId: z.string(),
     }),

@@ -17,6 +17,7 @@ export const WorkoutExerciseSchema = z.object({
   order: z.number({ message: 'Ordem deve ser um número' }).min(0, {
     message: 'Ordem deve ser maior ou igual a 0',
   }),
+  youtubeVideoId: z.string().nullable().optional(),
   sets: z.number({ message: 'Séries deve ser um número' }).min(1, {
     message: 'Número de séries deve ser maior que 0',
   }),

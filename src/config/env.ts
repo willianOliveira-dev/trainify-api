@@ -10,6 +10,7 @@ const envSchema = z.object({
     .string()
     .default('http://localhost:3000')
     .transform((val) => val.split(',').map((origin) => origin.trim())),
+  youtubeApiKey: z.string(),
   googleClientId: z.string(),
   googleClientSecret: z.string(),
   betterAuthSecret: z.string(),
@@ -23,6 +24,7 @@ export const env = envSchema.parse({
   betterAuthSecret: process.env.BETTER_AUTH_SECRET,
   betterAuthUrl: process.env.BETTER_AUTH_URL,
   databaseUrl: process.env.DATABASE_URL,
+  youtubeApiKey: process.env.YOUTUBE_API_KEY,
   nodeEnv: process.env.NODE_ENV,
   logLevel: process.env.LOG_LEVEL,
   allowedOrigins: process.env.ALLOWED_ORIGINS,
