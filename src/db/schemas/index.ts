@@ -4,6 +4,7 @@ export * from './relations.schema';
 export * from './user.schema';
 export * from './user-train-data.schema';
 export * from './user-workout-sessions.schema';
+export * from './user-workout-sessions-sets.schema';
 export * from './workout-days.schema';
 export * from './workout-exercises.schema';
 export * from './workout-plans.schema';

@@ -1,4 +1,3 @@
-import { NotFoundError } from '@/shared/errors/app.error';
 import type { GetUserTrainDataResponseDto } from '../dto/users.dto';
 import {
     usersRepository as defaultUsersRepository,
@@ -14,14 +13,9 @@ class GetUserTrainDataUseCase {
 
     async execute({
         userId,
-    }: GetUserTrainDataInput): Promise<GetUserTrainDataResponseDto> {
+    }: GetUserTrainDataInput): Promise<GetUserTrainDataResponseDto | null> {
         const data = await this.usersRepository.findByUserId(userId);
-
-        if (!data) {
-            throw new NotFoundError('Dados de treino do usuário');
-        }
-
-        return data;
+        return data ?? null;
     }
 }
 
