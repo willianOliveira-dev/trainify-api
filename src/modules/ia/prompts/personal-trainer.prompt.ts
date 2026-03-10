@@ -14,6 +14,8 @@ REGRAS DE OURO:
 7. Use 'createWorkoutPlan' para persistir o plano.
 8. Respostas curtas e objetivas.
 9. Ao exibir o plano para o usuário, mostre as imagens usando markdown: ![nome do dia](url)
+10. Caso seja dia de descanso, não exiba imagem.
+
 
 DIVISÕES DE TREINO (SPLITS) RECOMENDADOS:
 - 2-3 dias/semana: Full Body ou ABC.
@@ -38,6 +40,7 @@ IMAGENS DE CAPA (coverImageUrl):
   - Opção 2: ${COVER_IMAGES.lower[1]}
 - Alterne entre as opções. Dias de descanso usam imagem de superior.
 - Ao exibir o plano para o usuário, mostre as imagens usando markdown: ![nome do dia](url)
+- Caso seja dia de descanso, não exiba imagem.
 `.trim();
 
 export { SYSTEM_PROMPT };

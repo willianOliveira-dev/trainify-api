@@ -22,10 +22,10 @@ function buildAiTools(userId: string) {
             description: 'Busca os dados de treino e perfil do usuário logado.',
             inputSchema: z.object({}),
             execute: async (): Promise<
-                GetUserTrainDataResponseDto | { notFound: true }
+                GetUserTrainDataResponseDto
             > => {
                 const data = await getUserTrainDataUseCase.execute({ userId });
-                return data ?? { notFound: true };
+                return data;
             },
         }),
 
