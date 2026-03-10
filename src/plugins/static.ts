@@ -1,12 +1,16 @@
+import path from 'node:path';
 import fastifyStatic from '@fastify/static';
 import fp from 'fastify-plugin';
-import path from 'node:path';
 
 export default fp(
     async (app) => {
+        const root = path.join(process.cwd(), 'public', 'static');
         app.register(fastifyStatic, {
-            root: path.join(process.cwd(), 'public'),
+            root,
             prefix: '/static/',
+            setHeaders: (res) => {
+                res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+            },
         });
     },
     {
