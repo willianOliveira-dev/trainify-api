@@ -11,6 +11,7 @@ export const auth = betterAuth({
     trustedOrigins: env.allowedOrigins,
     socialProviders: {
         google: {
+            prompt: "select_account",
             clientId: env.googleClientId,
             clientSecret: env.googleClientSecret,
         },
@@ -20,5 +21,10 @@ export const auth = betterAuth({
         schema: schema,
     }),
     plugins: [openAPI()],
+    advanced: {
+        crossSubDomainCookies: {
+            enabled: true,
+        }
+    }
 });
 
