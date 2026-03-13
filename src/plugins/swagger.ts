@@ -25,7 +25,7 @@ export default fp(
         },
         servers: [
           {
-            url: `http://localhost:${env.port}`,
+            url: `${env.baseUrl}`,
             description: 'Localhost',
           },
           {
