@@ -13,7 +13,7 @@ export async function boostrap() {
     logger: {
       level: env.logLevel ?? 'info',
       transport:
-        env.nodeEnv === 'development'
+        process.env.NODE_ENV === 'development'
           ? {
               target: 'pino-pretty',
               options: {

@@ -33,13 +33,10 @@ FROM base AS production
 
 ENV NODE_ENV=production
 
-
 RUN pnpm install --frozen-lockfile --prod --ignore-scripts
-
 
 COPY --from=build /app/dist ./dist
 
 EXPOSE 8000
-
 
 CMD ["node", "dist/server.js"]
