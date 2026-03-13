@@ -51,3 +51,4 @@ async function searchYoutubeVideo(
 }
 
 export { searchYoutubeVideo, type YoutubeSearchResult };
+

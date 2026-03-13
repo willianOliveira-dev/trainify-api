@@ -26,3 +26,4 @@ export const workoutPlans = pgTable(
     index('workout_plans_created_at_idx').on(t.createdAt),
   ],
 );
+

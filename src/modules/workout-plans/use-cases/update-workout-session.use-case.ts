@@ -64,3 +64,4 @@ const updateWorkoutSessionUseCase = new UpdateWorkoutSessionUseCase(
 );
 
 export { UpdateWorkoutSessionUseCase, updateWorkoutSessionUseCase };
+

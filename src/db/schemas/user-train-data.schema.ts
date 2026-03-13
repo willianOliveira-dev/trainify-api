@@ -34,3 +34,4 @@ export const userTrainData = pgTable(
     index('user_train_data_user_id_idx').on(t.userId),
   ],
 );
+

@@ -10,3 +10,4 @@ export type CreateWorkoutDayDto = z.infer<typeof CreateWorkoutDaySchema>;
 export type UpdateWorkoutDayDto = z.infer<typeof UpdateWorkoutDaySchema>;
 export type WorkoutDaysParamsDto = z.infer<typeof WorkoutDaysParamsSchema>;
 export type WorkoutDaysResponseDto = z.infer<typeof WorkoutDaysResponseSchema>;
+

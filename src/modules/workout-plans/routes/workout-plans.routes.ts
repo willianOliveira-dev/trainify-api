@@ -206,3 +206,4 @@ const workoutPlans: FastifyPluginAsyncZod = async (app) => {
 };
 
 export { workoutPlans };
+

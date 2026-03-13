@@ -35,3 +35,4 @@ export const GetUserTrainDataResponseSchema = z
   })
   .describe('Resposta com dados de treino do usuário')
   .nullable();
+

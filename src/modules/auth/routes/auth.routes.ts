@@ -21,3 +21,4 @@ export const authRoutes: FastifyPluginAsyncZod = async (app) => {
     return reply.status(response.status).send((await response.text()) || null);
   });
 };
+

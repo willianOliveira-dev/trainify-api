@@ -17,3 +17,4 @@ const iaRoutes: FastifyPluginAsyncZod = async (app) => {
 };
 
 export { iaRoutes };
+

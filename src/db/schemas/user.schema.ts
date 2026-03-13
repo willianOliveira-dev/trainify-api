@@ -22,3 +22,4 @@ export const user = pgTable(
     index('users_created_at_idx').on(t.createdAt),
   ],
 );
+

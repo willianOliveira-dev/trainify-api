@@ -1,6 +1,6 @@
 import { google } from '@ai-sdk/google';
 import { APICallError, stepCountIs, streamText, type UIMessage } from 'ai';
-import type { ChatHandler } from '@/modules/ia/controllers/ia.controller.types';
+import type { ChatHandler } from '@/modules/ia/controllers/ia.controller.types.js';
 import { buildAiTools } from '@/modules/ia/helpers/build-ai-tools.helper';
 import { SYSTEM_PROMPT } from '@/modules/ia/prompts/personal-trainer.prompt';
 
@@ -54,3 +54,4 @@ class IaController {
 const iaController = new IaController();
 
 export { IaController, iaController };
+

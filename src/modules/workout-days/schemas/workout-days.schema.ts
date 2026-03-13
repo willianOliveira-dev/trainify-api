@@ -86,3 +86,4 @@ export const WorkoutDaysResponseSchema = WorkoutDaysSchema.omit({
 }).extend({
     exercises: z.array(WorkoutExerciseResponseSchema),
 });
+

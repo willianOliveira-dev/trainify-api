@@ -1,6 +1,6 @@
 import { ForbiddenError } from '@/shared/errors/app.error';
 import { WorkoutPlanNotFoundError } from '@/shared/errors/workout-plan.error';
-import type { GetWorkoutPlanDetailsResponseDto } from '../dto/workout-plans.dto';
+import type { GetWorkoutPlanDetailsResponseDto } from '../dto/workout-plans.dto.js';
 import {
   type WorkoutPlansRepository,
   workoutPlansRepository,
@@ -41,3 +41,4 @@ class GetWorkoutPlanDetailsUseCase {
 const getWorkoutPlanDetailsUseCase = new GetWorkoutPlanDetailsUseCase(workoutPlansRepository);
 
 export { GetWorkoutPlanDetailsUseCase, getWorkoutPlanDetailsUseCase };
+

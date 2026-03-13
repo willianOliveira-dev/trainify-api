@@ -75,3 +75,4 @@ export default fp(
     fastify: '5.x',
   },
 );
+

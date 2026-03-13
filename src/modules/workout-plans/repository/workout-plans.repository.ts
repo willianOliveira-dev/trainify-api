@@ -376,3 +376,4 @@ class WorkoutPlansRepository {
 const workoutPlansRepository = new WorkoutPlansRepository();
 
 export { WorkoutPlansRepository, workoutPlansRepository };
+

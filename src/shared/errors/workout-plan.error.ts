@@ -5,3 +5,4 @@ export class WorkoutPlanNotFoundError extends AppError {
     super('Plano de treino não encontrado.', 404, 'WORKOUT_PLAN_NOT_FOUND');
   }
 }
+

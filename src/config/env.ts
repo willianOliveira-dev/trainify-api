@@ -39,3 +39,4 @@ export const env = envSchema.parse({
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
     host: process.env.HOST,
 });
+

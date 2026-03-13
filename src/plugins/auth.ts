@@ -32,3 +32,4 @@ export default fp(
     name: 'auth',
   },
 );
+

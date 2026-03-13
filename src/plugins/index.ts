@@ -21,3 +21,4 @@ export async function registerPlugins(app: FastifyInstance) {
   await app.register(staticPlugin);
 
 }
+

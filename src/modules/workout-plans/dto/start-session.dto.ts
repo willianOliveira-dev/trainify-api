@@ -18,3 +18,4 @@ export const WorkoutSessionResponseSchema = z.object({
   startedAt: z.date().nullable(),
   completedAt: z.date().nullable(),
 });
+

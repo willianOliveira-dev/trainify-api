@@ -1,4 +1,4 @@
-import type { GetUserTrainDataResponseDto, UpsertUserTrainDataDto } from '../dto/users.dto';
+import type { GetUserTrainDataResponseDto, UpsertUserTrainDataDto } from '../dto/users.dto.js';
 import {
   usersRepository as defaultUsersRepository,
   type UsersRepository,

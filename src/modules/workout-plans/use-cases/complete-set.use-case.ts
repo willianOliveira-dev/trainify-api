@@ -56,3 +56,4 @@ const completeSetUseCase = new CompleteSetUseCase(
 );
 
 export { CompleteSetUseCase, completeSetUseCase };
+

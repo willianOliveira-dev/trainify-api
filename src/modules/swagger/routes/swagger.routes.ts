@@ -13,3 +13,4 @@ export const swaggerRoutes: FastifyPluginAsyncZod = async (app) => {
     },
   });
 };
+

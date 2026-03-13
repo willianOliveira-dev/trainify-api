@@ -18,3 +18,4 @@ export default fp<FastifyMultipartOptions>(
     fastify: '5.x',
   },
 );
+

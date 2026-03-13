@@ -4,7 +4,10 @@ import fp from 'fastify-plugin';
 
 export default fp(
     async (app) => {
-        const root = path.join(process.cwd(), 'public', 'static');
+        const isProduction = process.env.NODE_ENV === 'production';
+        const root = isProduction 
+            ? path.join(process.cwd(), 'dist', 'public', 'static')
+            : path.join(process.cwd(), 'public', 'static');
         app.register(fastifyStatic, {
             root,
             prefix: '/static/',
@@ -18,3 +21,4 @@ export default fp(
         fastify: '5.x',
     },
 );
+

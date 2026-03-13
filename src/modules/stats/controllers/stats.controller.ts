@@ -1,5 +1,5 @@
 import { getStatsUseCase } from '../use-cases/get-stats.use-case';
-import type { GetStatsHandler } from './stats.controller.types';
+import type { GetStatsHandler } from './stats.controller.types.js';
 
 class StatsController {
   getStats: GetStatsHandler = async (request, reply) => {
@@ -15,3 +15,4 @@ class StatsController {
 const statsController = new StatsController();
 
 export { StatsController, statsController };
+

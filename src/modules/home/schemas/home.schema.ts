@@ -27,3 +27,4 @@ export const GetHomeResponseSchema = z.object({
   workoutStreak: z.number(),
   consistencyByDay: z.record(z.iso.date(), ConsistencyDaySchema).nullable(),
 });
+

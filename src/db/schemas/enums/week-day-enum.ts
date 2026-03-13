@@ -9,3 +9,4 @@ export const weekDayEnum = pgEnum('week_day', [
   'saturday',
   'sunday',
 ]);
+

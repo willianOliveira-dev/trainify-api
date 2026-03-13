@@ -35,3 +35,4 @@ const usersRoutes: FastifyPluginAsyncZod = async (app) => {
 };
 
 export { usersRoutes };
+

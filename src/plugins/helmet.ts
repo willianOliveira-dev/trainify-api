@@ -30,3 +30,4 @@ export default fp<FastifyHelmetOptions>(
     fastify: '5.x',
   },
 );
+

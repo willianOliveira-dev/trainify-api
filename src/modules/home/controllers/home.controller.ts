@@ -1,5 +1,5 @@
 import { getHomeDataUseCase } from '../use-cases/get-home-data.use-case';
-import type { GetHomeDataHandler } from './get-home-data.controller.types';
+import type { GetHomeDataHandler } from './get-home-data.controller.types.js';
 
 class HomeController {
   getHomeData: GetHomeDataHandler = async (request, reply) => {
@@ -18,3 +18,4 @@ class HomeController {
 const homeController = new HomeController();
 
 export { HomeController, homeController };
+

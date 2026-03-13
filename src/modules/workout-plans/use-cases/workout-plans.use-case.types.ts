@@ -16,3 +16,4 @@ export type GetAllWorkoutPlanUseCaseOutput = WorkoutPlansListResponseDto;
 
 export type UpdateWorkoutPlanUseCaseInput = UpdateWorkoutPlanDto;
 export type UpdateWorkoutPlanUseCaseOutput = WorkoutPlanResponseDto;
+

@@ -2,7 +2,7 @@ import {
   type WorkoutPlansRepository,
   workoutPlansRepository,
 } from '../repository/workout-plans.repository';
-import type { GetAllWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
+import type { GetAllWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types.js';
 
 class GetAllWorkoutPlanUseCase {
   constructor(private readonly workoutPlansRepository: WorkoutPlansRepository) {}
@@ -37,3 +37,4 @@ class GetAllWorkoutPlanUseCase {
 const getAllWorkoutPlanUseCase = new GetAllWorkoutPlanUseCase(workoutPlansRepository);
 
 export { GetAllWorkoutPlanUseCase, getAllWorkoutPlanUseCase };
+

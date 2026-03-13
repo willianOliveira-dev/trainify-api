@@ -109,3 +109,4 @@ export const GetWorkoutDayResponseSchema = z.object({
         }),
     ),
 });
+

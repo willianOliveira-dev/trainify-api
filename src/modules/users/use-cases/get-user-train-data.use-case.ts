@@ -1,4 +1,4 @@
-import type { GetUserTrainDataResponseDto } from '../dto/users.dto';
+import type { GetUserTrainDataResponseDto } from '../dto/users.dto.js';
 import {
     usersRepository as defaultUsersRepository,
     type UsersRepository,
@@ -24,3 +24,4 @@ const getUserTrainDataUseCase = new GetUserTrainDataUseCase(
 );
 
 export { GetUserTrainDataUseCase, getUserTrainDataUseCase };
+

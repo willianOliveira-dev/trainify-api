@@ -117,3 +117,4 @@ export default fp(
         name: 'error-handler',
     },
 );
+

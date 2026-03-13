@@ -1,6 +1,6 @@
 import { getUserTrainDataUseCase } from '../use-cases/get-user-train-data.use-case';
 import { upsertUserTrainDataUseCase } from '../use-cases/upsert-user-train-data.use-case';
-import type { GetMeHandler, UpsertTrainDataHandler } from './users.controller.types';
+import type { GetMeHandler, UpsertTrainDataHandler } from './users.controller.types.js';
 
 class UsersController {
   getMe: GetMeHandler = async (request, reply) => {
@@ -19,3 +19,4 @@ class UsersController {
 const usersController = new UsersController();
 
 export { UsersController, usersController };
+

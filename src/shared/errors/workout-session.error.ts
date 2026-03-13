@@ -29,3 +29,4 @@ export class WrongWeekDayError extends AppError {
         );
     }
 }
+

@@ -34,3 +34,4 @@ export const workoutExercises = pgTable(
     check('workout_exercises_order_positive_chk', sql`${t.order} > 0`),
   ],
 );
+

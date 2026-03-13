@@ -23,3 +23,4 @@ const home: FastifyPluginAsyncZod = async (app) => {
 };
 
 export { home };
+

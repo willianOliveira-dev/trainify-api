@@ -6,3 +6,4 @@ import type {
 
 export type ChatBodyDto = z.infer<typeof ChatBodySchema>;
 export type WorkoutDayDto = z.infer<typeof WorkoutDaySchema>;
+

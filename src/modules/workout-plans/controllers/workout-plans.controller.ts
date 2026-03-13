@@ -7,11 +7,11 @@ import { getWorkoutPlanDetailsUseCase } from '../use-cases/get-workout-plan-deta
 import { startWorkoutSessionUseCase } from '../use-cases/start-workout-session.use-case';
 import { undoSetUseCase } from '../use-cases/undo-set.use-case';
 import { updateWorkoutSessionUseCase } from '../use-cases/update-workout-session.use-case';
-import type { CompleteSetHandler } from './complete-set.controller.types';
-import type { GetSessionSetsHandler } from './get-session-sets.controller.types';
-import type { StartWorkoutSessionHandler } from './start-workout-session.controller.types';
-import type { UndoSetHandler } from './undo-set.controller.types';
-import type { UpdateWorkoutSessionHandler } from './update-workout-session.controller.types';
+import type { CompleteSetHandler } from './complete-set.controller.types.js';
+import type { GetSessionSetsHandler } from './get-session-sets.controller.types.js';
+import type { StartWorkoutSessionHandler } from './start-workout-session.controller.types.js';
+import type { UndoSetHandler } from './undo-set.controller.types.js';
+import type { UpdateWorkoutSessionHandler } from './update-workout-session.controller.types.js';
 import type {
     CreateWorkoutPlanHandler,
     FindAllWorkoutPlansHandler,
@@ -125,3 +125,4 @@ class WorkoutPlansController {
 const workoutPlansController = new WorkoutPlansController();
 
 export { WorkoutPlansController, workoutPlansController };
+

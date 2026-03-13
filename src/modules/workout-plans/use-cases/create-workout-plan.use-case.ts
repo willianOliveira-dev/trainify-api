@@ -1,12 +1,12 @@
-import type { CreateWorkoutPlanDto } from '../dto/workout-plans.dto';
+import type { CreateWorkoutPlanDto } from '../dto/workout-plans.dto.js';
 import { resolveCoverImage } from '../helpers/workout-cover.helper';
 import { searchYoutubeVideo } from '../helpers/youtube.helper';
 import {
     type WorkoutPlansRepository,
     workoutPlansRepository,
 } from '../repository/workout-plans.repository';
-import type { WorkoutPlanRepositoryDbOutput } from '../repository/workout-plans.repository.types';
-import type { CreateWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types';
+import type { WorkoutPlanRepositoryDbOutput } from '../repository/workout-plans.repository.types.js';
+import type { CreateWorkoutPlanUseCaseOutput } from './workout-plans.use-case.types.js';
 
 class CreateWorkoutPlanUseCase {
     constructor(
@@ -98,3 +98,4 @@ const createWorkoutPlanUseCase = new CreateWorkoutPlanUseCase(
     workoutPlansRepository,
 );
 export { CreateWorkoutPlanUseCase, createWorkoutPlanUseCase };
+

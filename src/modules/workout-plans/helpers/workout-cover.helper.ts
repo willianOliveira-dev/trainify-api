@@ -23,3 +23,4 @@ export function resolveCoverImage(category: string): string {
 }
 
 export const COVER_CATEGORIES = Object.keys(COVER_IMAGES);
+

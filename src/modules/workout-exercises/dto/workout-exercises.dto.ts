@@ -10,3 +10,4 @@ export type CreateWorkoutExerciseDto = z.infer<typeof CreateWorkoutExerciseSchem
 export type UpdateWorkoutExerciseDto = z.infer<typeof UpdateWorkoutExerciseSchema>;
 export type WorkoutExerciseParamsDto = z.infer<typeof WorkoutExerciseParamsSchema>;
 export type WorkoutExerciseResponseDto = z.infer<typeof WorkoutExerciseResponseSchema>;
+

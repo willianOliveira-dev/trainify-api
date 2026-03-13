@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import utc from 'dayjs/plugin/utc';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
+import utc from 'dayjs/plugin/utc.js';
 import {
     type WorkoutSessionsRepository,
     workoutSessionsRepository,
@@ -178,3 +178,4 @@ const getHomeDataUseCase = new GetHomeDataUseCase(
 );
 
 export { GetHomeDataUseCase, getHomeDataUseCase };
+

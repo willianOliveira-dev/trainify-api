@@ -6,3 +6,4 @@ import type {
 
 export type UpsertUserTrainDataDto = z.infer<typeof UpsertUserTrainDataSchema>;
 export type GetUserTrainDataResponseDto = z.infer<typeof GetUserTrainDataResponseSchema>;
+

@@ -37,3 +37,4 @@ export default fp<FastifyRateLimitOptions>(
     fastify: '5.x',
   },
 );
+

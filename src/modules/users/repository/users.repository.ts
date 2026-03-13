@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@/db/connection';
 import { user as userSchema, userTrainData } from '@/db/schemas';
-import type { GetUserTrainDataResponseDto, UpsertUserTrainDataDto } from '../dto/users.dto';
+import type { GetUserTrainDataResponseDto, UpsertUserTrainDataDto } from '../dto/users.dto.js';
 
 class UsersRepository {
  async upsert(userId: string, data: UpsertUserTrainDataDto): Promise<GetUserTrainDataResponseDto> {

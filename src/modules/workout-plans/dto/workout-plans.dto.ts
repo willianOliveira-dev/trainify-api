@@ -22,3 +22,4 @@ export type WorkoutPlanResponseDto = z.infer<typeof WorkoutPlanResponseSchema>;
 export type WorkoutPlansListResponseDto = z.infer<typeof WorkoutPlansListResponseSchema>;
 export type GetWorkoutPlanDetailsResponseDto = z.infer<typeof GetWorkoutPlanDetailsResponseSchema>;
 export type GetWorkoutDayResponseDto = z.infer<typeof GetWorkoutDayResponseSchema>;
+

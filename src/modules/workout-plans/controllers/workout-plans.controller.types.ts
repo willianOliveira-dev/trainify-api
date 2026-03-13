@@ -1,4 +1,12 @@
-import type { RouteHandler } from 'fastify';
+import type {
+  ContextConfigDefault,
+  FastifySchema,
+  RawReplyDefaultExpression,
+  RawRequestDefaultExpression,
+  RawServerDefault,
+  RouteHandlerMethod,
+} from 'fastify';
+import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import type {
   CreateWorkoutPlanDto,
   GetWorkoutDayResponseDto,
@@ -11,26 +19,59 @@ import type {
 
 export type CreateWorkoutPlanRequestBody = CreateWorkoutPlanDto;
 export type CreateWorkoutPlanResponse = WorkoutPlanResponseDto;
-export type CreateWorkoutPlanHandler = RouteHandler<{
-  Body: CreateWorkoutPlanRequestBody;
-  Reply: CreateWorkoutPlanResponse;
-}>;
+export type CreateWorkoutPlanHandler = RouteHandlerMethod<
+  RawServerDefault,
+  RawRequestDefaultExpression,
+  RawReplyDefaultExpression,
+  {
+    Body: CreateWorkoutPlanRequestBody;
+    Reply: CreateWorkoutPlanResponse;
+  },
+  ContextConfigDefault,
+  FastifySchema,
+  ZodTypeProvider
+>;
 
 export type FindByIdWorkoutPlanParams = WorkoutPlanParamsDto;
 export type FindByIdWorkoutPlanResponse = GetWorkoutPlanDetailsResponseDto;
-export type FindByIdHandler = RouteHandler<{
-  Params: FindByIdWorkoutPlanParams;
-  Reply: FindByIdWorkoutPlanResponse;
-}>;
+export type FindByIdHandler = RouteHandlerMethod<
+  RawServerDefault,
+  RawRequestDefaultExpression,
+  RawReplyDefaultExpression,
+  {
+    Params: FindByIdWorkoutPlanParams;
+    Reply: FindByIdWorkoutPlanResponse;
+  },
+  ContextConfigDefault,
+  FastifySchema,
+  ZodTypeProvider
+>;
 
 export type FindDayDetailsParams = WorkoutPlanDayParamsDto;
 export type FindDayDetailsResponse = GetWorkoutDayResponseDto;
-export type FindDayDetailsHandler = RouteHandler<{
-  Params: FindDayDetailsParams;
-  Reply: FindDayDetailsResponse;
-}>;
+export type FindDayDetailsHandler = RouteHandlerMethod<
+  RawServerDefault,
+  RawRequestDefaultExpression,
+  RawReplyDefaultExpression,
+  {
+    Params: FindDayDetailsParams;
+    Reply: FindDayDetailsResponse;
+  },
+  ContextConfigDefault,
+  FastifySchema,
+  ZodTypeProvider
+>;
 
 export type FindAllWorkoutPlansResponse = WorkoutPlansListResponseDto;
-export type FindAllWorkoutPlansHandler = RouteHandler<{
-  Reply: FindAllWorkoutPlansResponse;
-}>;
+export type FindAllWorkoutPlansHandler = RouteHandlerMethod<
+  RawServerDefault,
+  RawRequestDefaultExpression,
+  RawReplyDefaultExpression,
+  {
+    Reply: FindAllWorkoutPlansResponse;
+  },
+  ContextConfigDefault,
+  FastifySchema,
+  ZodTypeProvider
+>;
+

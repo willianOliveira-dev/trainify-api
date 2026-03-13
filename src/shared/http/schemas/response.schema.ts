@@ -16,3 +16,4 @@ export const privateMutationResponse = <T extends Record<number, z.ZodTypeAny>>(
   ...privateResponse(successResponses),
   400: ValidationErrorResponseSchema.describe('Dados inválidos'),
 });
+

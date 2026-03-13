@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import utc from 'dayjs/plugin/utc.js';
 import { WEEKDAY_MAP } from '@/modules/home/constants/week-day-map.constant';
 import {
     type WorkoutPlansRepository,
@@ -175,3 +175,4 @@ const getStatsUseCase = new GetStatsUseCase(
 );
 
 export { GetStatsUseCase, getStatsUseCase };
+

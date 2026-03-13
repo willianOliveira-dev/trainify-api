@@ -9,3 +9,4 @@ neonConfig.webSocketConstructor = ws;
 const pool = new Pool({ connectionString: env.databaseUrl });
 
 export const db = drizzle(pool, { schema });
+

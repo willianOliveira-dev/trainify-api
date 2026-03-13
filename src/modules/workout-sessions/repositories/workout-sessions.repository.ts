@@ -153,3 +153,4 @@ class WorkoutSessionsRepository {
 const workoutSessionsRepository = new WorkoutSessionsRepository();
 
 export { WorkoutSessionsRepository, workoutSessionsRepository };
+

@@ -23,3 +23,4 @@ const statsRoutes: FastifyPluginAsyncZod = async (app) => {
 };
 
 export { statsRoutes };
+

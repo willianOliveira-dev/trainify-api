@@ -56,3 +56,4 @@ export const WorkoutExerciseResponseSchema = WorkoutExerciseSchema.omit({
   createdAt: true,
   updatedAt: true,
 });
+

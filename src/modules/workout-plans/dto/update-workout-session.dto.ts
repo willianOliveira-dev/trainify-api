@@ -15,3 +15,4 @@ export const UpdateWorkoutSessionResponseSchema = z.object({
   startedAt: z.date().nullable(),
   completedAt: z.date().nullable(),
 });
+

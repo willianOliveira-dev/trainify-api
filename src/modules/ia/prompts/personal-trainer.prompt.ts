@@ -206,3 +206,4 @@ Cada dia de treino DEVE ter um campo coverCategory com base no foco principal do
 `;
 
 export { SYSTEM_PROMPT };
+

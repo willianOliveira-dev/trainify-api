@@ -17,3 +17,4 @@ export const GetStatsResponseSchema = z.object({
   conclusionRate: z.number(),
   totalTimeInSeconds: z.number(),
 });
+

@@ -30,3 +30,4 @@ export type WorkoutPlanDetailsRepositoryDbOutput = GetWorkoutPlanDetailsResponse
 export type WorkoutDayDetailsRepositoryDbOutput = GetWorkoutDayResponseDto & {
   workoutPlanUserId: string;
 };
+
