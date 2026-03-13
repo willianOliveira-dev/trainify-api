@@ -24,6 +24,7 @@ export const auth = betterAuth({
     advanced: {
         crossSubDomainCookies: {
             enabled: true,
+            domain: env.nodeEnv === "production" ? ".onrender.com" : undefined
         }
     }
 });
