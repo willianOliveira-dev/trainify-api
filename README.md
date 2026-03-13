@@ -1,7 +1,7 @@
 # Trainify API
 
 <div align="center">
-  <img src="https://trainify-api-mljg.onrender.com/static/logo/logo.png" alt="Trainify API Banner" width="200"/>
+  <img src="https://raw.githubusercontent.com/willianOliveira-dev/trainify-api/main/assets/logo.png alt="Trainify API Banner" width="200"/>
   
   <br/>
   <img src="https://img.shields.io/badge/Node.js-24.x-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js"/>
